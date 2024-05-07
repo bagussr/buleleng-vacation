@@ -1,0 +1,62 @@
+{% extends "layout.html" %} {% block content %}
+<main style="width: 100%; flex-direction: column" class="d-flex">
+  <div style="width: 100%; position: relative; height: 50%">
+    <img
+      style="
+        object-fit: cover;
+        width: 100%;
+        height: 80vh;
+        filter: saturate(80%) contrast(100%) brightness(60%);
+      "
+      src="https://a.cdn-hotels.com/gdcs/production62/d679/115f67b3-1da1-4c57-93c5-9e8f7635e571.jpg"
+      alt="bg-main"
+    />
+    <div
+      class="position-absolute d-flex"
+      style="
+        top: 40%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        flex-direction: column;
+      "
+    >
+      <h1 class="text-light">
+        Temukan Pesona Alam Sejati di Bali Utara, Kabupaten Buleleng: Surga
+        Tersembunyi yang Menawan!
+      </h1>
+      <button class="btn btn-light" style="width: fit-content">Explore</button>
+    </div>
+  </div>
+
+  <div class="container p-5 d-flex">
+    <div class="row align-items-center" style="padding: 5rem 0">
+      <div class="col">
+        <div class="row">
+          <h3 style="color: #31503e; font-weight: bold">{{best.nama}}</h3>
+        </div>
+        <div class="row">
+          <p style="white-space: pre-wrap">{{best.deskripsi}}</p>
+        </div>
+      </div>
+      <div class="col">
+        <img src="{{best.gambar_utama.url}}" alt="" />
+      </div>
+    </div>
+  </div>
+
+  <div style="background-color: #f8f9fa">
+    <div class="container" style="padding: 5rem 0">
+      <div class="row text-center">
+        <h2 style="color: #31503e; font-weight: bold">Wisata Pilihan</h2>
+        <p>
+          Pilihan wisata terbaik berdasarkan kategori dengan tempat di mana
+          keindahan alam berpadu sempurna dengan keramahan lokal. Di sini,
+          setiap langkah adalah petualangan dan setiap pandangan adalah
+          pemandangan yang tak terlupakan
+        </p>
+      </div>
+    </div>
+  </div>
+</main>
+
+{% endblock content %}
