@@ -1,0 +1,557 @@
+{% extends "layout.html" %}
+<!--  -->
+{% block title %}Wisata | {{wisata.nama}}{% endblock title %}
+
+<!--  -->
+{% block content %}
+<main class="mt-5" style="padding: 0 3rem">
+    {% if wisata.gambar_lain|length > 0 %}
+    <div class="container-fluid">
+        <div
+            style="
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                grid-template-rows: 500px;
+                overflow: hidden;
+                gap: 24px;
+                object-fit: cover;
+            "
+            class="rounded-4"
+        >
+            <img
+                src="{{wisata.gambar_utama.url}}"
+                alt=""
+                class="d-flex"
+                style="width: 100%; height: 100%; object-fit: cover"
+            />
+            <div
+                style="
+                    display: grid;
+                    grid-template-columns: 1.2fr 1.2fr;
+                    grid-template-rows: 250px 250px;
+                    grid-auto-flow: row;
+                    object-fit: cover;
+                    gap: 16px;
+                "
+            >
+                {% for item in wisata.gambar_lain %}
+                <img
+                    src="{{item.foto.url}}"
+                    style="object-fit: cover; width: 100%; height: 100%"
+                    alt=""
+                    class="d-flex"
+                />
+                {% endfor %}
+            </div>
+        </div>
+        <div class="row mt-5" style="color: #31503e">
+            <h1>{{wisata.nama}}</h1>
+            <div class="d-flex mt-3" style="gap: 3rem">
+                <span class="d-flex justify-content-between">
+                    <p
+                        class="d-flex align-items-center"
+                        style="width: 40px; gap: 10px"
+                    >
+                        {{wisata.rating}}
+                        <svg
+                            version="1.0"
+                            id="Layer_1"
+                            xmlns="http://www.w3.org/2000/svg"
+                            xmlns:xlink="http://www.w3.org/1999/xlink"
+                            viewBox="0 0 64 64"
+                            enable-background="new 0 0 64 64"
+                            xml:space="preserve"
+                            fill="#000000"
+                        >
+                            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                            <g
+                                id="SVGRepo_tracerCarrier"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            ></g>
+                            <g id="SVGRepo_iconCarrier">
+                                <g>
+                                    <path
+                                        fill="#F9EBB2"
+                                        d="M31.998,2.478c0.279,0,0.463,0.509,0.463,0.509l8.806,18.759l20.729,3.167l-14.999,15.38l3.541,21.701 l-18.54-10.254l-18.54,10.254l3.541-21.701L2,24.912l20.729-3.167l8.798-18.743C31.527,3.002,31.719,2.478,31.998,2.478 M31.998,0 c-0.775,0-1.48,0.448-1.811,1.15l-8.815,18.778L1.698,22.935c-0.741,0.113-1.356,0.632-1.595,1.343 c-0.238,0.71-0.059,1.494,0.465,2.031l14.294,14.657L11.484,61.67c-0.124,0.756,0.195,1.517,0.822,1.957 c0.344,0.243,0.747,0.366,1.151,0.366c0.332,0,0.666-0.084,0.968-0.25l17.572-9.719l17.572,9.719 c0.302,0.166,0.636,0.25,0.968,0.25c0.404,0,0.808-0.123,1.151-0.366c0.627-0.44,0.946-1.201,0.822-1.957l-3.378-20.704 l14.294-14.657c0.523-0.537,0.703-1.321,0.465-2.031c-0.238-0.711-0.854-1.229-1.595-1.343l-19.674-3.006L33.809,1.15 C33.479,0.448,32.773,0,31.998,0L31.998,0z"
+                                    ></path>
+                                    <path
+                                        fill="#F9EBB2"
+                                        d="M31.998,2.478c0.279,0,0.463,0.509,0.463,0.509l8.806,18.759l20.729,3.167l-14.999,15.38l3.541,21.701 l-18.54-10.254l-18.54,10.254l3.541-21.701L2,24.912l20.729-3.167l8.798-18.743C31.527,3.002,31.719,2.478,31.998,2.478"
+                                    ></path>
+                                </g>
+                            </g>
+                        </svg>
+                    </p>
+                </span>
+                <div class="d-flex" style="flex-direction: column">
+                    <p style="font-weight: 400; font-size: medium">
+                        <svg
+                            width="24px"
+                            height="24px"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                        >
+                            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                            <g
+                                id="SVGRepo_tracerCarrier"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            ></g>
+                            <g id="SVGRepo_iconCarrier">
+                                <path
+                                    d="M12 21C15.5 17.4 19 14.1764 19 10.2C19 6.22355 15.866 3 12 3C8.13401 3 5 6.22355 5 10.2C5 14.1764 8.5 17.4 12 21Z"
+                                    stroke="#000000"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                ></path>
+                                <path
+                                    d="M12 12C13.1046 12 14 11.1046 14 10C14 8.89543 13.1046 8 12 8C10.8954 8 10 8.89543 10 10C10 11.1046 10.8954 12 12 12Z"
+                                    stroke="#000000"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                ></path>
+                            </g>
+                        </svg>
+                        {{wisata.alamat}}
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-5">
+            <h2 style="color: #31503e">Deskripsi</h2>
+            <p style="white-space: pre-wrap">{{wisata.deskripsi}}</p>
+        </div>
+        {% if wisata.emmet_tag %}
+        <div class="row mt-5 w-100">
+            <h2 style="color: #31503e">Informasi Lokasi</h2>
+            <div id="location"></div>
+        </div>
+        {% endif %}
+
+        <div class="row mt-5">
+            <h2 style="color: #31503e">Feedback</h2>
+            {% for item in feedback %}
+            <div class="d-flex" style="flex-direction: column">
+                <div class="d-flex" style="flex-direction: column; gap: 24px">
+                    <span class="d-flex" style="align-items: center; gap: 18px">
+                        <div
+                            class="rounded-circle bg-secondary"
+                            style="width: 50px; height: 50px"
+                        ></div>
+                        <span class="d-flex" style="flex-direction: column">
+                            <p style="color: #31503e; margin: 0">
+                                {{item.user}}
+                            </p>
+                            <p style="margin: 0">
+                                {{item.tanggal|date:'Y M d'}}
+                            </p>
+                        </span>
+                        <div
+                            class="d-flex"
+                            style="width: 500px; align-self: start"
+                        >
+                            {% for rate in item.range %}
+                            <span style="width: 24px">
+                                <svg
+                                    version="1.0"
+                                    id="Layer_1"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    xmlns:xlink="http://www.w3.org/1999/xlink"
+                                    viewBox="0 0 64 64"
+                                    enable-background="new 0 0 64 64"
+                                    xml:space="preserve"
+                                    fill="#000000"
+                                >
+                                    <g
+                                        id="SVGRepo_bgCarrier"
+                                        stroke-width="0"
+                                    ></g>
+                                    <g
+                                        id="SVGRepo_tracerCarrier"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                    ></g>
+                                    <g id="SVGRepo_iconCarrier">
+                                        <g>
+                                            <path
+                                                fill="#F9EBB2"
+                                                d="M31.998,2.478c0.279,0,0.463,0.509,0.463,0.509l8.806,18.759l20.729,3.167l-14.999,15.38l3.541,21.701 l-18.54-10.254l-18.54,10.254l3.541-21.701L2,24.912l20.729-3.167l8.798-18.743C31.527,3.002,31.719,2.478,31.998,2.478 M31.998,0 c-0.775,0-1.48,0.448-1.811,1.15l-8.815,18.778L1.698,22.935c-0.741,0.113-1.356,0.632-1.595,1.343 c-0.238,0.71-0.059,1.494,0.465,2.031l14.294,14.657L11.484,61.67c-0.124,0.756,0.195,1.517,0.822,1.957 c0.344,0.243,0.747,0.366,1.151,0.366c0.332,0,0.666-0.084,0.968-0.25l17.572-9.719l17.572,9.719 c0.302,0.166,0.636,0.25,0.968,0.25c0.404,0,0.808-0.123,1.151-0.366c0.627-0.44,0.946-1.201,0.822-1.957l-3.378-20.704 l14.294-14.657c0.523-0.537,0.703-1.321,0.465-2.031c-0.238-0.711-0.854-1.229-1.595-1.343l-19.674-3.006L33.809,1.15 C33.479,0.448,32.773,0,31.998,0L31.998,0z"
+                                            ></path>
+                                            <path
+                                                fill="#F9EBB2"
+                                                d="M31.998,2.478c0.279,0,0.463,0.509,0.463,0.509l8.806,18.759l20.729,3.167l-14.999,15.38l3.541,21.701 l-18.54-10.254l-18.54,10.254l3.541-21.701L2,24.912l20.729-3.167l8.798-18.743C31.527,3.002,31.719,2.478,31.998,2.478"
+                                            ></path>
+                                        </g>
+                                    </g>
+                                </svg>
+                            </span>
+                            {% endfor %}
+                        </div>
+                    </span>
+                    <p>{{item.text}}</p>
+                </div>
+            </div>
+            <hr />
+            {% endfor %}
+        </div>
+
+        <form
+            class="mt-5 pb-5"
+            action="{% url 'add_feedback' %}"
+            method="post"
+            id="feedback-form"
+        >
+            {% csrf_token %}
+            <div class="mb-3">
+                <div class="star-rating">
+                    <button
+                        type="button"
+                        class="star btn btn-light"
+                        data-value="1"
+                    >
+                        &#9733;
+                    </button>
+                    <button
+                        type="button"
+                        class="star btn btn-light"
+                        data-value="2"
+                    >
+                        &#9733;
+                    </button>
+                    <button
+                        type="button"
+                        class="star btn btn-light"
+                        data-value="3"
+                    >
+                        &#9733;
+                    </button>
+                    <button
+                        type="button"
+                        class="star btn btn-light"
+                        data-value="4"
+                    >
+                        &#9733;
+                    </button>
+                    <button
+                        type="button"
+                        class="star btn btn-light"
+                        data-value="5"
+                    >
+                        &#9733;
+                    </button>
+                    <input type="hidden" name="rating" id="rating" value="" />
+                </div>
+            </div>
+            <div class="mb-3">
+                <input type="hidden" name="url" value="{{request.path}}" />
+                <input type="hidden" name="wisata_id" value="{{wisata.id}}" />
+                <label for="exampleFormControlTextarea1" class="form-label"
+                    >Berikan Tanggapan untuk Wisata</label
+                >
+                <textarea
+                    class="form-control"
+                    id="exampleFormControlTextarea1"
+                    rows="3"
+                    name="masukan"
+                    placeholder="Masukan...."
+                ></textarea>
+            </div>
+            <button
+                type="submit"
+                class="btn btn-primary"
+                style="padding-left: 3rem; padding-right: 3rem"
+            >
+                Kirim
+            </button>
+        </form>
+    </div>
+
+    {% else%}
+    <div class="container-fluid">
+        <div
+            style="
+                display: grid;
+                grid-template-columns: 1fr;
+                overflow: hidden;
+                grid-template-rows: 750px;
+                object-fit: cover;
+            "
+            class="rounded-4"
+        >
+            <img
+                src="{{wisata.gambar_utama.url}}"
+                style="width: 100%; height: 100%"
+                alt=""
+                class="d-flex"
+            />
+        </div>
+        <div class="row mt-5" style="color: #31503e">
+            <h1>{{wisata.nama}}</h1>
+            <div class="d-flex mt-3" style="gap: 3rem">
+                <span class="d-flex justify-content-between">
+                    <p
+                        class="d-flex align-items-center"
+                        style="width: 40px; gap: 10px"
+                    >
+                        {{wisata.rating}}
+                        <svg
+                            version="1.0"
+                            id="Layer_1"
+                            xmlns="http://www.w3.org/2000/svg"
+                            xmlns:xlink="http://www.w3.org/1999/xlink"
+                            viewBox="0 0 64 64"
+                            enable-background="new 0 0 64 64"
+                            xml:space="preserve"
+                            fill="#000000"
+                        >
+                            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                            <g
+                                id="SVGRepo_tracerCarrier"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            ></g>
+                            <g id="SVGRepo_iconCarrier">
+                                <g>
+                                    <path
+                                        fill="#F9EBB2"
+                                        d="M31.998,2.478c0.279,0,0.463,0.509,0.463,0.509l8.806,18.759l20.729,3.167l-14.999,15.38l3.541,21.701 l-18.54-10.254l-18.54,10.254l3.541-21.701L2,24.912l20.729-3.167l8.798-18.743C31.527,3.002,31.719,2.478,31.998,2.478 M31.998,0 c-0.775,0-1.48,0.448-1.811,1.15l-8.815,18.778L1.698,22.935c-0.741,0.113-1.356,0.632-1.595,1.343 c-0.238,0.71-0.059,1.494,0.465,2.031l14.294,14.657L11.484,61.67c-0.124,0.756,0.195,1.517,0.822,1.957 c0.344,0.243,0.747,0.366,1.151,0.366c0.332,0,0.666-0.084,0.968-0.25l17.572-9.719l17.572,9.719 c0.302,0.166,0.636,0.25,0.968,0.25c0.404,0,0.808-0.123,1.151-0.366c0.627-0.44,0.946-1.201,0.822-1.957l-3.378-20.704 l14.294-14.657c0.523-0.537,0.703-1.321,0.465-2.031c-0.238-0.711-0.854-1.229-1.595-1.343l-19.674-3.006L33.809,1.15 C33.479,0.448,32.773,0,31.998,0L31.998,0z"
+                                    ></path>
+                                    <path
+                                        fill="#F9EBB2"
+                                        d="M31.998,2.478c0.279,0,0.463,0.509,0.463,0.509l8.806,18.759l20.729,3.167l-14.999,15.38l3.541,21.701 l-18.54-10.254l-18.54,10.254l3.541-21.701L2,24.912l20.729-3.167l8.798-18.743C31.527,3.002,31.719,2.478,31.998,2.478"
+                                    ></path>
+                                </g>
+                            </g>
+                        </svg>
+                    </p>
+                </span>
+                <div class="d-flex" style="flex-direction: column">
+                    <p style="font-weight: 400; font-size: medium">
+                        <svg
+                            width="24px"
+                            height="24px"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                        >
+                            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                            <g
+                                id="SVGRepo_tracerCarrier"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            ></g>
+                            <g id="SVGRepo_iconCarrier">
+                                <path
+                                    d="M12 21C15.5 17.4 19 14.1764 19 10.2C19 6.22355 15.866 3 12 3C8.13401 3 5 6.22355 5 10.2C5 14.1764 8.5 17.4 12 21Z"
+                                    stroke="#000000"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                ></path>
+                                <path
+                                    d="M12 12C13.1046 12 14 11.1046 14 10C14 8.89543 13.1046 8 12 8C10.8954 8 10 8.89543 10 10C10 11.1046 10.8954 12 12 12Z"
+                                    stroke="#000000"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                ></path>
+                            </g>
+                        </svg>
+                        {{wisata.alamat}}
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-5">
+            <h2 style="color: #31503e">Deskripsi</h2>
+            <p style="white-space: pre-wrap">{{wisata.deskripsi}}</p>
+        </div>
+        {% if wisata.emmet_tag %}
+        <div class="row mt-5 w-100">
+            <h2 style="color: #31503e">Informasi Lokasi</h2>
+            <div id="location"></div>
+        </div>
+        {% endif %}
+
+        <div class="row mt-5">
+            <h2 style="color: #31503e">Feedback</h2>
+            {% for item in feedback %}
+            <div class="d-flex" style="flex-direction: column">
+                <div class="d-flex" style="flex-direction: column; gap: 24px">
+                    <span class="d-flex" style="align-items: center; gap: 18px">
+                        <div
+                            class="rounded-circle bg-secondary"
+                            style="width: 50px; height: 50px"
+                        ></div>
+                        <span class="d-flex" style="flex-direction: column">
+                            <p style="color: #31503e; margin: 0">
+                                {{item.user}}
+                            </p>
+                            <p style="margin: 0">
+                                {{item.tanggal|date:'Y M d'}}
+                            </p>
+                        </span>
+                        <div
+                            class="d-flex"
+                            style="width: 500px; align-self: start"
+                        >
+                            {% for rate in item.range %}
+                            <span style="width: 24px">
+                                <svg
+                                    version="1.0"
+                                    id="Layer_1"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    xmlns:xlink="http://www.w3.org/1999/xlink"
+                                    viewBox="0 0 64 64"
+                                    enable-background="new 0 0 64 64"
+                                    xml:space="preserve"
+                                    fill="#000000"
+                                >
+                                    <g
+                                        id="SVGRepo_bgCarrier"
+                                        stroke-width="0"
+                                    ></g>
+                                    <g
+                                        id="SVGRepo_tracerCarrier"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                    ></g>
+                                    <g id="SVGRepo_iconCarrier">
+                                        <g>
+                                            <path
+                                                fill="#F9EBB2"
+                                                d="M31.998,2.478c0.279,0,0.463,0.509,0.463,0.509l8.806,18.759l20.729,3.167l-14.999,15.38l3.541,21.701 l-18.54-10.254l-18.54,10.254l3.541-21.701L2,24.912l20.729-3.167l8.798-18.743C31.527,3.002,31.719,2.478,31.998,2.478 M31.998,0 c-0.775,0-1.48,0.448-1.811,1.15l-8.815,18.778L1.698,22.935c-0.741,0.113-1.356,0.632-1.595,1.343 c-0.238,0.71-0.059,1.494,0.465,2.031l14.294,14.657L11.484,61.67c-0.124,0.756,0.195,1.517,0.822,1.957 c0.344,0.243,0.747,0.366,1.151,0.366c0.332,0,0.666-0.084,0.968-0.25l17.572-9.719l17.572,9.719 c0.302,0.166,0.636,0.25,0.968,0.25c0.404,0,0.808-0.123,1.151-0.366c0.627-0.44,0.946-1.201,0.822-1.957l-3.378-20.704 l14.294-14.657c0.523-0.537,0.703-1.321,0.465-2.031c-0.238-0.711-0.854-1.229-1.595-1.343l-19.674-3.006L33.809,1.15 C33.479,0.448,32.773,0,31.998,0L31.998,0z"
+                                            ></path>
+                                            <path
+                                                fill="#F9EBB2"
+                                                d="M31.998,2.478c0.279,0,0.463,0.509,0.463,0.509l8.806,18.759l20.729,3.167l-14.999,15.38l3.541,21.701 l-18.54-10.254l-18.54,10.254l3.541-21.701L2,24.912l20.729-3.167l8.798-18.743C31.527,3.002,31.719,2.478,31.998,2.478"
+                                            ></path>
+                                        </g>
+                                    </g>
+                                </svg>
+                            </span>
+                            {% endfor %}
+                        </div>
+                    </span>
+                    <p>{{item.text}}</p>
+                </div>
+            </div>
+            <hr />
+            {% endfor %}
+        </div>
+
+        <form
+            class="mt-5 pb-5"
+            action="{% url 'add_feedback' %}"
+            method="post"
+            id="feedback-form"
+        >
+            {% csrf_token %}
+            <div class="mb-3">
+                <div class="star-rating">
+                    <button
+                        type="button"
+                        class="star btn btn-light"
+                        data-value="1"
+                    >
+                        &#9733;
+                    </button>
+                    <button
+                        type="button"
+                        class="star btn btn-light"
+                        data-value="2"
+                    >
+                        &#9733;
+                    </button>
+                    <button
+                        type="button"
+                        class="star btn btn-light"
+                        data-value="3"
+                    >
+                        &#9733;
+                    </button>
+                    <button
+                        type="button"
+                        class="star btn btn-light"
+                        data-value="4"
+                    >
+                        &#9733;
+                    </button>
+                    <button
+                        type="button"
+                        class="star btn btn-light"
+                        data-value="5"
+                    >
+                        &#9733;
+                    </button>
+                    <input type="hidden" name="rating" id="rating" value="" />
+                </div>
+            </div>
+            <div class="mb-3">
+                <input type="hidden" name="url" value="{{request.path}}" />
+                <input type="hidden" name="wisata_id" value="{{wisata.id}}" />
+                <label for="exampleFormControlTextarea1" class="form-label"
+                    >Berikan Tanggapan untuk Wisata</label
+                >
+                <textarea
+                    class="form-control"
+                    id="exampleFormControlTextarea1"
+                    rows="3"
+                    name="masukan"
+                    placeholder="Masukan...."
+                ></textarea>
+            </div>
+            <button
+                type="submit"
+                class="btn btn-primary"
+                style="padding-left: 3rem; padding-right: 3rem"
+            >
+                Kirim
+            </button>
+        </form>
+    </div>
+    {% endif %}
+</main>
+{% endblock content %} {% block javascript %}
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        function parsePlainTextToHTML(text) {
+            // Replace HTML entities with their corresponding characters
+            const decodedText = text
+                .replace(/&lt;/g, '<')
+                .replace(/&gt;/g, '>')
+                .replace(/&quot;/g, '"')
+                .replace(/&amp;/g, '&')
+                .replace(/&#39;/g, "'");
+
+            return decodedText;
+        }
+
+        const plainText = '{{wisata.emmet_tag}}';
+        const htmlText = parsePlainTextToHTML(plainText);
+        document.getElementById('location').innerHTML = htmlText;
+
+        const stars = document.querySelectorAll('.star');
+        const ratingInput = document.getElementById('rating');
+
+        stars.forEach((star) => {
+            star.addEventListener('click', function () {
+                const rating = this.getAttribute('data-value');
+                console.log(rating);
+                ratingInput.value = rating; // Set the hidden input value
+
+                // Highlight the selected and previous stars
+                stars.forEach((s) => {
+                    s.style.color =
+                        s.dataset.value <= rating ? '#ffc107' : '#e4e5e9';
+                });
+            });
+        });
+    });
+</script>
+
+{% endblock javascript %}

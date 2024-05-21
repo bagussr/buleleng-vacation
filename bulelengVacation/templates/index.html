@@ -1,62 +1,288 @@
 {% extends "layout.html" %} {% block content %}
 <main style="width: 100%; flex-direction: column" class="d-flex">
-  <div style="width: 100%; position: relative; height: 50%">
-    <img
-      style="
-        object-fit: cover;
-        width: 100%;
-        height: 80vh;
-        filter: saturate(80%) contrast(100%) brightness(60%);
-      "
-      src="https://a.cdn-hotels.com/gdcs/production62/d679/115f67b3-1da1-4c57-93c5-9e8f7635e571.jpg"
-      alt="bg-main"
-    />
-    <div
-      class="position-absolute d-flex"
-      style="
-        top: 40%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        flex-direction: column;
-      "
-    >
-      <h1 class="text-light">
-        Temukan Pesona Alam Sejati di Bali Utara, Kabupaten Buleleng: Surga
-        Tersembunyi yang Menawan!
-      </h1>
-      <button class="btn btn-light" style="width: fit-content">Explore</button>
-    </div>
-  </div>
-
-  <div class="container p-5 d-flex">
-    <div class="row align-items-center" style="padding: 5rem 0">
-      <div class="col">
-        <div class="row">
-          <h3 style="color: #31503e; font-weight: bold">{{best.nama}}</h3>
+    <div style="width: 100%; position: relative; height: 50%">
+        <img
+            style="
+                object-fit: cover;
+                width: 100%;
+                height: 80vh;
+                filter: saturate(80%) contrast(100%) brightness(60%);
+            "
+            src="https://a.cdn-hotels.com/gdcs/production62/d679/115f67b3-1da1-4c57-93c5-9e8f7635e571.jpg"
+            alt="bg-main"
+        />
+        <div
+            class="position-absolute d-flex"
+            style="
+                top: 40%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                flex-direction: column;
+            "
+        >
+            <h1 class="text-light">
+                Temukan Pesona Alam Sejati di Bali Utara, Kabupaten Buleleng:
+                Surga Tersembunyi yang Menawan!
+            </h1>
+            <button class="btn btn-light" style="width: fit-content">
+                Explore
+            </button>
         </div>
-        <div class="row">
-          <p style="white-space: pre-wrap">{{best.deskripsi}}</p>
-        </div>
-      </div>
-      <div class="col">
-        <img src="{{best.gambar_utama.url}}" alt="" />
-      </div>
     </div>
-  </div>
 
-  <div style="background-color: #f8f9fa">
-    <div class="container" style="padding: 5rem 0">
-      <div class="row text-center">
-        <h2 style="color: #31503e; font-weight: bold">Wisata Pilihan</h2>
-        <p>
-          Pilihan wisata terbaik berdasarkan kategori dengan tempat di mana
-          keindahan alam berpadu sempurna dengan keramahan lokal. Di sini,
-          setiap langkah adalah petualangan dan setiap pandangan adalah
-          pemandangan yang tak terlupakan
-        </p>
-      </div>
+    <div class="container p-5 d-flex">
+        <div class="row align-items-center" style="padding: 5rem 0">
+            <div class="col">
+                <div class="row">
+                    <h3 style="color: #31503e; font-weight: bold">
+                        {{best.nama}}
+                    </h3>
+                </div>
+                <div class="row">
+                    <p style="white-space: pre-wrap">{{best.deskripsi}}</p>
+                </div>
+            </div>
+            <div class="col">
+                <img src="{{best.gambar_utama.url}}" alt="" />
+            </div>
+        </div>
     </div>
-  </div>
+
+    <div style="background-color: #f8f9fa" class="">
+        <div class="container" style="padding: 5rem 0">
+            <div class="row text-center">
+                <h2 style="color: #31503e; font-weight: bold">
+                    Wisata Pilihan
+                </h2>
+                <p>
+                    Pilihan wisata terbaik berdasarkan kategori dengan tempat di
+                    mana keindahan alam berpadu sempurna dengan keramahan lokal.
+                    Di sini, setiap langkah adalah petualangan dan setiap
+                    pandangan adalah pemandangan yang tak terlupakan
+                </p>
+            </div>
+        </div>
+        <div class="row align-items-center justify-content-center">
+            <div class="w-50">
+                <div id="carouselExample" class="carousel slide">
+                    <div class="carousel-inner">
+                        <div class="carousel-item active p-5">
+                            <img
+                                src="http://localhost:8000/media/wisata/pexels-eberhard-grossgasteiger-1367192_d5OQmS7.jpg"
+                                class="d-block"
+                                style="object-fit: cover"
+                                alt="..."
+                            />
+                        </div>
+                        <div class="carousel-item p-5">
+                            <img
+                                src="http://localhost:8000/media/wisata/pexels-eberhard-grossgasteiger-1367192_d5OQmS7.jpg"
+                                class="d-block"
+                                style="object-fit: cover"
+                                alt="..."
+                            />
+                        </div>
+                        <div class="carousel-item p-5">
+                            <img
+                                src="http://localhost:8000/media/wisata/pexels-eberhard-grossgasteiger-1367192_d5OQmS7.jpg"
+                                class="d-block"
+                                style="object-fit: cover"
+                                alt="..."
+                            />
+                        </div>
+                    </div>
+                    <button
+                        class="carousel-control-prev"
+                        type="button"
+                        data-bs-target="#carouselExample"
+                        data-bs-slide="prev"
+                    >
+                        <span
+                            class="carousel-control-prev-icon"
+                            aria-hidden="true"
+                        ></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button
+                        class="carousel-control-next"
+                        type="button"
+                        data-bs-target="#carouselExample"
+                        data-bs-slide="next"
+                    >
+                        <span
+                            class="carousel-control-next-icon"
+                            aria-hidden="true"
+                        ></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container" style="padding: 4rem 0">
+        <div class="row">
+            <div class="row justify-content-center">
+                <label for="staticEmail" class="col-sm-1 form-label"
+                    ><svg
+                        width="24px"
+                        height="24px"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                    >
+                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                        <g
+                            id="SVGRepo_tracerCarrier"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        ></g>
+                        <g id="SVGRepo_iconCarrier">
+                            <path
+                                d="M16.6725 16.6412L21 21M19 11C19 15.4183 15.4183 19 11 19C6.58172 19 3 15.4183 3 11C3 6.58172 6.58172 3 11 3C15.4183 3 19 6.58172 19 11Z"
+                                stroke="#000000"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            ></path>
+                        </g></svg
+                ></label>
+
+                <div class="col-sm-10">
+                    <input
+                        type="search"
+                        name="q"
+                        class="form-control"
+                        id="staticEmail"
+                        placeholder="Wisata ..."
+                    />
+                </div>
+            </div>
+        </div>
+        <div class="row p-2 bg-dark-subtle rounded-3 mt-4">
+            <div class="d-flex align-items-center justify-content-center p-2">
+                {% for item in kategori %}
+                <a
+                    style="margin: 0"
+                    class="btn btn-link text-dark"
+                    href="wisata?c={{item.nama}}"
+                    >{{item.nama}}</a
+                >
+                {% endfor %}
+            </div>
+        </div>
+        <div
+            class="mt-5"
+            style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem"
+        >
+            {% for item in wisata %}
+            <div
+                class="d-flex"
+                style="flex-direction: column; gap: 0.7rem; cursor: pointer"
+                btn="button-link"
+                data-url="/wisata/{{item.nama}}"
+            >
+                <img
+                    height="300"
+                    src="{{item.gambar_utama.url}}"
+                    class="rounded-3"
+                    alt="..."
+                />
+                <div class="d-flex" style="flex-direction: column">
+                    <span class="d-flex justify-content-between">
+                        <p style="font-weight: 500; font-size: larger">
+                            {{item.nama}}
+                        </p>
+                        <p
+                            class="d-flex align-items-center"
+                            style="width: 40px; gap: 10px"
+                        >
+                            {% if item.rating %} {{item.rating}} {% else %}
+                            <!--  -->
+                            0 {% endif %}
+                            <svg
+                                version="1.0"
+                                id="Layer_1"
+                                xmlns="http://www.w3.org/2000/svg"
+                                xmlns:xlink="http://www.w3.org/1999/xlink"
+                                viewBox="0 0 64 64"
+                                enable-background="new 0 0 64 64"
+                                xml:space="preserve"
+                                fill="#000000"
+                            >
+                                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                <g
+                                    id="SVGRepo_tracerCarrier"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                ></g>
+                                <g id="SVGRepo_iconCarrier">
+                                    <g>
+                                        <path
+                                            fill="#F9EBB2"
+                                            d="M31.998,2.478c0.279,0,0.463,0.509,0.463,0.509l8.806,18.759l20.729,3.167l-14.999,15.38l3.541,21.701 l-18.54-10.254l-18.54,10.254l3.541-21.701L2,24.912l20.729-3.167l8.798-18.743C31.527,3.002,31.719,2.478,31.998,2.478 M31.998,0 c-0.775,0-1.48,0.448-1.811,1.15l-8.815,18.778L1.698,22.935c-0.741,0.113-1.356,0.632-1.595,1.343 c-0.238,0.71-0.059,1.494,0.465,2.031l14.294,14.657L11.484,61.67c-0.124,0.756,0.195,1.517,0.822,1.957 c0.344,0.243,0.747,0.366,1.151,0.366c0.332,0,0.666-0.084,0.968-0.25l17.572-9.719l17.572,9.719 c0.302,0.166,0.636,0.25,0.968,0.25c0.404,0,0.808-0.123,1.151-0.366c0.627-0.44,0.946-1.201,0.822-1.957l-3.378-20.704 l14.294-14.657c0.523-0.537,0.703-1.321,0.465-2.031c-0.238-0.711-0.854-1.229-1.595-1.343l-19.674-3.006L33.809,1.15 C33.479,0.448,32.773,0,31.998,0L31.998,0z"
+                                        ></path>
+                                        <path
+                                            fill="#F9EBB2"
+                                            d="M31.998,2.478c0.279,0,0.463,0.509,0.463,0.509l8.806,18.759l20.729,3.167l-14.999,15.38l3.541,21.701 l-18.54-10.254l-18.54,10.254l3.541-21.701L2,24.912l20.729-3.167l8.798-18.743C31.527,3.002,31.719,2.478,31.998,2.478"
+                                        ></path>
+                                    </g>
+                                </g>
+                            </svg>
+                        </p>
+                    </span>
+                    <p style="font-weight: 400; font-size: medium">
+                        <svg
+                            width="24px"
+                            height="24px"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                        >
+                            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                            <g
+                                id="SVGRepo_tracerCarrier"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                Wz
+                            ></g>
+                            <g id="SVGRepo_iconCarrier">
+                                <path
+                                    d="M12 21C15.5 17.4 19 14.1764 19 10.2C19 6.22355 15.866 3 12 3C8.13401 3 5 6.22355 5 10.2C5 14.1764 8.5 17.4 12 21Z"
+                                    stroke="#000000"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                ></path>
+                                <path
+                                    d="M12 12C13.1046 12 14 11.1046 14 10C14 8.89543 13.1046 8 12 8C10.8954 8 10 8.89543 10 10C10 11.1046 10.8954 12 12 12Z"
+                                    stroke="#000000"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                ></path>
+                            </g>
+                        </svg>
+                        {{item.alamat}}
+                    </p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
 </main>
 
-{% endblock content %}
+{% endblock content %} {% block javascript %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var btns = document.querySelectorAll("[btn='button-link']");
+        btns.forEach((button) => {
+            var link = button.getAttribute('data-url');
+
+            button.addEventListener('click', function () {
+                window.location = link;
+            });
+        });
+    });
+</script>
+{% endblock javascript %}
