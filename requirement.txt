@@ -4,4 +4,8 @@ mysqlclient==2.2.4 ; python_version >= "3.10" and python_version < "4.0"
 pillow==10.3.0 ; python_version >= "3.10" and python_version < "4.0"
 sqlparse==0.5.0 ; python_version >= "3.10" and python_version < "4.0"
 typing-extensions==4.11.0 ; python_version >= "3.10" and python_version < "3.11"
+<<<<<<< HEAD
 tzdata==2024.1 ; python_version >= "3.10" and python_version < "4.0" 
+=======
+tzdata==2024.1 ; python_version >= "3.10" and python_version < "4.0"
+>>>>>>> a3bacd523947a98d19673d57c31391ebf807bffe
