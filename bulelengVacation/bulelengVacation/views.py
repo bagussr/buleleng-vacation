@@ -3,34 +3,64 @@ from django.db.models import Q
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 
-from vacation.models import Feedback, Kategori, KategoriWisata, Wisata
+from vacation.models import (
+    Feedback,
+    Kategori,
+    KategoriWisata,
+    LoginWisataAnalytic,
+    TravelAgency,
+    Wisata,
+)
 
 
+@login_required(login_url="/login")
 def index(request):
     wisata = Wisata.objects.all()
     best = Wisata.objects.first()
     kategori = Kategori.objects.all()
+    choosen = Wisata.objects.filter(pilihan=True).all()[:5]
+    agency = TravelAgency.objects.all()
     wisatas = []
     for i in wisata:
-        print(i.convert())
         wisatas.append(i.convert())
 
     return render(
-        request, "index.html", {"wisata": wisatas, "best": best, "kategori": kategori}
+        request,
+        "index.html",
+        {
+            "wisata": wisatas,
+            "best": best,
+            "kategori": kategori,
+            "choosen": choosen,
+            "agency": agency,
+        },
     )
 
 
+@login_required(login_url="/login")
 def profile(request):
     feedback = Feedback.objects.filter(user_id=request.user)
     feed = []
+    agency = TravelAgency.objects.all()
     for i in feedback:
 
         feed.append(i.convert())
-    return render(request, "profile.html", {"user": request.user, "feedback": feed})
+    return render(
+        request,
+        "profile.html",
+        {
+            "user": request.user,
+            "feedback": feed,
+            "agency": agency,
+        },
+    )
 
 
+@login_required(login_url="/login")
 def wisata(request):
     data = request.GET
+    agency = TravelAgency.objects.all()
+
     if data.get("c"):
         kategori_wisata = KategoriWisata.objects.filter(kategori_id__nama=data.get("c"))
         wisatas = Wisata.objects.distinct().filter(
@@ -46,7 +76,15 @@ def wisata(request):
     for item in wisatas:
         wisata_s.append(item.convert())
     kategori = Kategori.objects.all()
-    return render(request, "wisata.html", {"wisata": wisata_s, "kategori": kategori})
+    return render(
+        request,
+        "wisata.html",
+        {
+            "wisata": wisata_s,
+            "kategori": kategori,
+            "agency": agency,
+        },
+    )
 
 
 def logout_def(request):

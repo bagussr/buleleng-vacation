@@ -53,7 +53,7 @@
                                 Deskripsi
                             </button>
                         </td>
-                        <td class="text-center">5</td>
+                        <td class="text-center">{{wisata.rating}}</td>
                         <td>
                             <button
                                 name="button-perizinan"
@@ -90,10 +90,11 @@
                         <td>
                             <div
                                 class="d-flex"
-                                style="width: fit-content; column-gap: 10px"
+                                style="width: fit-content; column-gap: 10px; flex-wrap: wrap; justify-content: space-evenly; row-gap: 8px;"
                             >
                                 <button
                                     class="btn btn-primary d-flex aligns-center"
+                                    style="height: 2.4rem;"
                                     name="edit-button"
                                     data-edit="{{wisata.id}}"
                                     data-bs-toggle="modal"
@@ -110,10 +111,33 @@
                                         <path
                                             d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"
                                         /></svg
-                                    >Edit
+                                    >
                                 </button>
-
                                 <button
+                                style="height: 2.4rem;"
+                                class="btn btn-info d-flex aligns-center"
+                                name="travel-button"
+                                data-wisata="{{wisata.id}}"
+                                data-bs-toggle="modal"
+                                data-bs-target="#travelModal"
+                            >
+                            <svg width="512" height="512" viewBox="0 0 512 512" style="color:currentColor" xmlns="http://www.w3.org/2000/svg" class="h-full w-full"><rect width="512" height="512" x="0" y="0" rx="30" fill="transparent" stroke="transparent" stroke-width="0" stroke-opacity="100%" paint-order="stroke"></rect><svg width="406px" height="406px" viewBox="0 0 24 24" fill="currentColor" x="53" y="53" role="img" style="display:inline-block;vertical-align:middle" xmlns="http://www.w3.org/2000/svg"><g fill="currentColor"><path fill="currentColor" d="M20 6h-3V4c0-1.11-.89-2-2-2H9c-1.11 0-2 .89-2 2v2H4c-1.11 0-2 .89-2 2v11c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zM9 4h6v2H9V4zm11 15H4v-2h16v2zm0-5H4V8h3v2h2V8h6v2h2V8h3v6z"/></g></svg></svg>
+                            </button>
+                            {% if request.user.is_superuser %}
+                                <a
+                                style="height: 2.4rem;"
+                                href="{% url 'edit_wisata_pilihan' id=wisata.id %}"
+                                {% if wisata.pilihan %}
+                                class="btn btn-success d-flex aligns-center"
+                                {% else %}
+                                class="btn btn-secondary d-flex aligns-center"
+                                {% endif %}
+                                >
+                                <svg width="512" height="512" viewBox="0 0 512 512" style="color:currentColor" xmlns="http://www.w3.org/2000/svg" class="h-full w-full"><rect width="512" height="512" x="0" y="0" rx="30" fill="transparent" stroke="transparent" stroke-width="0" stroke-opacity="100%" paint-order="stroke"></rect><svg width="256px" height="256px" viewBox="0 0 24 24" fill="currentColor" x="128" y="128" role="img" style="display:inline-block;vertical-align:middle" xmlns="http://www.w3.org/2000/svg"><g fill="currentColor"><g fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="m8 12.5l3 3l5-6"/><circle cx="12" cy="12" r="10"/></g></g></svg></svg>
+                                <a/>
+                            {% endif %}
+                                <button
+                                    style="height: 2.4rem;"
                                     class="btn btn-danger d-flex aligns-center"
                                     name="delete-button"
                                     data-delete="{{wisata.id}}"
@@ -134,7 +158,7 @@
                                         <path
                                             d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"
                                         /></svg
-                                    >Hapus
+                                    >
                                 </button>
                             </div>
                         </td>
@@ -144,7 +168,6 @@
             </table>
         </div>
     </div>
-</div>
 
 <div
     class="modal fade"
@@ -558,46 +581,76 @@
             </div>
         </div>
     </form>
+</div>
 
-    <div
-        class="modal fade"
-        id="deleteModal"
-        tabindex="-1"
-        aria-labelledby="deleteModalLabel"
-        aria-hidden="true"
-    >
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="deleteModalLabel">
-                        Hapus Kategori
-                    </h1>
-                    <button
-                        type="button"
-                        class="btn-close"
-                        data-bs-dismiss="modal"
-                        aria-label="Close"
-                    ></button>
-                </div>
-                <div class="modal-body">
-                    Apakah yakin untuk menghapus kategori?
-                </div>
-                <div class="modal-footer">
-                    <button
-                        type="button"
-                        class="btn btn-secondary"
-                        data-bs-dismiss="modal"
-                    >
-                        Batal
-                    </button>
-                    <a type="button" class="btn btn-danger" id="delete-url"
-                        >Hapus</a
-                    >
-                </div>
+<div
+    class="modal fade"
+    id="deleteModal"
+    tabindex="-1"
+    aria-labelledby="deleteModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="deleteModalLabel">Hapus Kategori</h1>
+                <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+                ></button>
+            </div>
+            <div class="modal-body">Apakah yakin untuk menghapus kategori?</div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                Batal
+                </button>
+                <a type="button" class="btn btn-danger" id="delete-url">Hapus</a>
             </div>
         </div>
     </div>
+</div>
 
+<div
+    class="modal fade"
+    id="travelModal"
+    tabindex="-1"
+    aria-labelledby="travelModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog">
+        <form class="modal-content" method="post" action="{% url 'add_agency_wisata' %}">
+            <input type="hidden" id="travel-wisata-id" name="wisata_id">
+            {% csrf_token %}
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="travelModalLabel">Tambah Agency Wisata</h1>
+                <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+                ></button>
+            </div>
+            <div class="modal-body">
+                {% for agency in agencies %}
+                <div class="form-check form-switch mb-2">
+                    <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault-{{agency.id}}" name="agencies[]" value="{{agency.id}}">
+                    <label class="form-check-label ms-3" for="flexSwitchCheckDefault-{{agency.id}}">{{agency.nama}}</label>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                Batal
+                </button>
+                <button type="submit" class="btn btn-primary" id="delete-url">Simpan</>
+            </div>
+        </form>
+    </div>
+</div>
+    
+</div>
     {% endblock content %} {% block javascript %}
     <script>
         document.addEventListener('DOMContentLoaded', function () {
@@ -652,6 +705,45 @@
                     };
                 });
             });
+
+            var travelButtons = document.querySelectorAll(
+                "[name='travel-button']"
+            )
+            let myValue = JSON.parse('{{ x|escapejs }}')
+
+            travelButtons.forEach((button)=>{
+                button.addEventListener('click', function(){
+                    var x = document.querySelectorAll("[name='agencies[]']")
+                    document.getElementById("travel-wisata-id").setAttribute('value', this.getAttribute('data-wisata'))
+                    xhr = new XMLHttpRequest();
+
+                    xhr.open(
+                        "GET",
+                        "/wisata/agency/" + this.getAttribute('data-wisata'),
+                        true
+                    )
+                    xhr.send();
+                    xhr.onload = e =>{
+                        data = JSON.parse(JSON.parse(xhr.response));
+                        myValue.forEach((res)=>{
+                            var xValue = data.map((x)=>{
+                                if (x.fields.agency == res.pk){
+                                    return x.fields.agency
+                                }
+                            }).filter(function( element ) {
+                                return element !== undefined;
+                             })
+                             data.forEach((y)=>{
+                                x.forEach((check)=>{
+                                    if (y.fields.agency == xValue && check.value == xValue){
+                                        check.checked = true;
+                                    }
+                                })
+                             })
+                        })
+                    }
+                })
+            })
 
             var deleteButtons = document.querySelectorAll(
                 "[name='delete-button']"
@@ -708,4 +800,3 @@
         });
     </script>
     {% endblock javascript %}
-</div>

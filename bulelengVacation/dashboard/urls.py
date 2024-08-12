@@ -8,4 +8,5 @@ urlpatterns = [
     path("wisata", views.wisata, name="wisata_dashboard"),
     path("feedback", views.feedback, name="feedback"),
     path("kategori", views.kategori, name="kategori"),
+    path("travel", views.travel, name="travel"),
 ]

@@ -1,6 +1,43 @@
 {% extends "dashboard/layout.html" %} {% block content %}
-<div class='container'>
-  <h1>Dashboard</h1>
+<div class="container">
+    <h1>Dashboard</h1>
+    <div class="row mt-5 w-100">
+        <canvas id="myChart"></canvas>
+    </div>
 </div>
-  {% endblock content %}
-</div>
+{% endblock content %}
+
+<!-- -->
+{% block javascript %}
+<script>
+    const ctx = document.getElementById('myChart');
+    var labels = [];
+    var datas = []
+
+    {% for item in analytic %}
+      labels.push("{{item.wisata}}")
+      datas.push({{item.dcount  }})
+    {% endfor %}
+
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: labels,
+        datasets: [
+        {
+          label: 'Analisis Wisata di Akses',
+          data: datas,
+          borderWidth: 1
+        }
+        ]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+</script>
+{% endblock %}

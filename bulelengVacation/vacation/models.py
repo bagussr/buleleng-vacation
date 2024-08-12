@@ -16,6 +16,7 @@ class Wisata(models.Model):
     deskripsi = models.TextField()
     perizinan = models.ImageField(upload_to="wisata/izin", null=True, blank=True)
     gambar_utama = models.ImageField(upload_to="wisata", null=True, blank=True)
+    pilihan = models.BooleanField(default=False)
 
     user = models.ForeignKey(
         CustomUser, on_delete=models.CASCADE, null=True, blank=True
@@ -26,7 +27,7 @@ class Wisata(models.Model):
         photos = self.fotowisata_set.all()
         rate = 0
         for i in rating:
-            rate += i.rating / float(self.feedback_set.count())
+            rate += round(i.rating / float(self.feedback_set.count()), 1)
 
         return {
             "id": self.id,
@@ -38,6 +39,7 @@ class Wisata(models.Model):
             "gambar_utama": self.gambar_utama,
             "kategori": self.kategoriwisata_set.first().kategori_id.nama,
             "rating": rate,
+            "pilihan": self.pilihan,
             "gambar_lain": photos,
         }
 
@@ -49,6 +51,7 @@ class Wisata(models.Model):
             "emmet_tag": self.emmet_tags,
             "deskripsi": self.deskripsi,
             "kategori": self.kategoriwisata_set.first().kategori_id.id,
+            "pilihan": self.pilihan,
         }
 
 
@@ -82,3 +85,29 @@ class Feedback(models.Model):
             "user": self.user_id_id,
             "wisata": self.wisata_id,
         }
+
+
+class VacationAnalytic(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    wisata = models.ForeignKey(Wisata, on_delete=models.CASCADE)
+    created_at = models.DateField(auto_now_add=True)
+
+
+class TravelAgency(models.Model):
+    nama = models.CharField(max_length=255)
+    kontak = models.CharField(max_length=100)
+    alamat = models.TextField()
+    deskripsi = models.TextField(null=True, blank=True)
+    logo = models.ImageField(upload_to="agency/")
+    website = models.TextField(null=True, blank=True)
+
+
+class WisataAgency(models.Model):
+    wisata = models.ForeignKey(Wisata, on_delete=models.CASCADE)
+    agency = models.ForeignKey(TravelAgency, on_delete=models.CASCADE)
+
+
+class LoginWisataAnalytic(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    wisata = models.ForeignKey(Wisata, on_delete=models.CASCADE)
+    created_at = models.DateField(auto_now_add=True, null=True, blank=True)

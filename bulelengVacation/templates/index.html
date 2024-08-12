@@ -1,4 +1,11 @@
-{% extends "layout.html" %} {% block content %}
+{% extends "layout.html" %} 
+<!--  -->
+{% block title %}
+    Buleleng Vacation Website
+{% endblock %}
+
+<!--  -->
+{% block content %}
 <main style="width: 100%; flex-direction: column" class="d-flex">
     <div style="width: 100%; position: relative; height: 50%">
         <img
@@ -47,7 +54,9 @@
             </div>
         </div>
     </div>
-
+    
+    {% if choosen|length  > 0 %}
+        
     <div style="background-color: #f8f9fa" class="">
         <div class="container" style="padding: 5rem 0">
             <div class="row text-center">
@@ -62,44 +71,30 @@
                 </p>
             </div>
         </div>
-        <div class="row align-items-center justify-content-center">
+        <d class="row align-items-center justify-content-center">
             <div class="w-50">
                 <div id="carouselExample" class="carousel slide">
                     <div class="carousel-inner">
-                        <div class="carousel-item active p-5">
-                            <img
-                                src="http://localhost:8000/media/wisata/pexels-eberhard-grossgasteiger-1367192_d5OQmS7.jpg"
-                                class="d-block"
-                                style="object-fit: cover"
-                                alt="..."
-                            />
-                        </div>
-                        <div class="carousel-item p-5">
-                            <img
-                                src="http://localhost:8000/media/wisata/pexels-eberhard-grossgasteiger-1367192_d5OQmS7.jpg"
-                                class="d-block"
-                                style="object-fit: cover"
-                                alt="..."
-                            />
-                        </div>
-                        <div class="carousel-item p-5">
-                            <img
-                                src="http://localhost:8000/media/wisata/pexels-eberhard-grossgasteiger-1367192_d5OQmS7.jpg"
-                                class="d-block"
-                                style="object-fit: cover"
-                                alt="..."
-                            />
-                        </div>
+                        {% for item in choosen %}
+                            <div class="carousel-item active p-5" style="height: 500px;" >
+                                <img
+                                    src="{{item.gambar_utama.url}}"
+                                    class="d-block"
+                                    style="max-height: 100%; max-width: 100%; object-fit: cover; width: 100%;"
+                                    alt="..."
+                                />
+                            </div>
+                        {% endfor %}
                     </div>
                     <button
                         class="carousel-control-prev"
                         type="button"
                         data-bs-target="#carouselExample"
                         data-bs-slide="prev"
-                    >
+                        >
                         <span
-                            class="carousel-control-prev-icon"
-                            aria-hidden="true"
+                        class="carousel-control-prev-icon"
+                        aria-hidden="true"
                         ></span>
                         <span class="visually-hidden">Previous</span>
                     </button>
@@ -108,24 +103,24 @@
                         type="button"
                         data-bs-target="#carouselExample"
                         data-bs-slide="next"
-                    >
+                        >
                         <span
-                            class="carousel-control-next-icon"
-                            aria-hidden="true"
+                        class="carousel-control-next-icon"
+                        aria-hidden="true"
                         ></span>
                         <span class="visually-hidden">Next</span>
                     </button>
                 </div>
             </div>
         </div>
-    </div>
+{% endif %}
 
-    <div class="container" style="padding: 4rem 0">
-        <div class="row">
-            <div class="row justify-content-center">
-                <label for="staticEmail" class="col-sm-1 form-label"
-                    ><svg
-                        width="24px"
+<div class="container" style="padding: 4rem 0">
+    <div class="row">
+        <div class="row justify-content-center">
+            <label for="staticEmail" class="col-sm-1 form-label"
+            ><svg
+            width="24px"
                         height="24px"
                         viewBox="0 0 24 24"
                         fill="none"
@@ -270,6 +265,7 @@
             {% endfor %}
         </div>
     </div>
+</div>
 </main>
 
 {% endblock content %} {% block javascript %}

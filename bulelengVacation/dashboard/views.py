@@ -1,16 +1,61 @@
+from django import template
+from django.core import serializers
 from django.shortcuts import render
 from django.http.response import HttpResponseForbidden
 from django.contrib.auth.decorators import login_required
+from django.db.models import Count
 
-from vacation.models import Wisata, Feedback, Kategori
+from vacation.models import (
+    TravelAgency,
+    Wisata,
+    Feedback,
+    Kategori,
+    LoginWisataAnalytic,
+)
 from auths.models import CustomUser
 
 # Create your views here.
 
+register = template.Library()
+
+
+@register.filter
+def in_list(value, the_list):
+    value = str(value)
+    return value in the_list.split(",")
+
 
 @login_required(login_url="/login")
 def dashboard(request):
-    return render(request, "dashboard/index.html")
+    if request.user.is_superuser:
+        res = (
+            LoginWisataAnalytic.objects.values("wisata_id")
+            .annotate(dcount=Count("wisata_id"))
+            .order_by()
+        )
+    else:
+        wisata = Wisata.objects.filter(user_id=request.user.id)
+        res = (
+            LoginWisataAnalytic.objects.values("wisata_id")
+            .annotate(dcount=Count("wisata_id"))
+            .filter(wisata_id__in=[x.id for x in wisata])
+            .order_by()
+        )
+    analytic = []
+    for x in res:
+        analytic.append(
+            {
+                "wisata": Wisata.objects.get(pk=x["wisata_id"]).nama,
+                "dcount": x["dcount"],
+            }
+        )
+    return render(request, "dashboard/index.html", {"analytic": analytic})
+
+
+@login_required(login_url="/login")
+def travel(request):
+    agencies = TravelAgency.objects.all()
+    return render(request, "dashboard/agency.html", {"agencies": agencies})
 
 
 @login_required(login_url="/login")
@@ -29,12 +74,20 @@ def wisata(request):
         wisata = Wisata.objects.filter(user_id=request.user.id)
     kategori = Kategori.objects.all()
     wisatas = []
+    agencies = TravelAgency.objects.all()
 
     for item in wisata:
         wisatas.append(item.convert())
 
     return render(
-        request, "dashboard/wisata.html", {"wisata": wisatas, "kategori": kategori}
+        request,
+        "dashboard/wisata.html",
+        {
+            "wisata": wisatas,
+            "kategori": kategori,
+            "agencies": agencies,
+            "x": serializers.serialize("json", agencies),
+        },
     )
 
 

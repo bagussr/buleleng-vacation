@@ -21,7 +21,7 @@ class CustomUserForm(forms.ModelForm):
 class CustomUserFormEdit(forms.ModelForm):
     class Meta:
         model = CustomUser
-        fields = ("first_name", "last_name", "email", "alamat", "is_staff")
+        fields = ("first_name", "last_name", "email", "domisili", "alamat", "is_staff")
 
 
 class RegisterForm(forms.ModelForm):
@@ -33,8 +33,7 @@ class RegisterForm(forms.ModelForm):
             "first_name",
             "last_name",
             "password",
-            "alamat",
-            "ttl",
+            "domisili",
         )
 
 
@@ -57,8 +56,7 @@ class RegisterView(CreateView):
             first_name=data["firstname"],
             last_name=data["lastname"],
             email=data["email"],
-            ttl=data["ttl"],
-            alamat=data["alamat"],
+            domisili=data["domisili"],
             is_staff=False,
         )
         user.set_password(user.password)
@@ -81,7 +79,9 @@ class LoginView(CreateView):
 
             return redirect("/home")
         else:
-            return render(self.template_name)
+            return render(
+                request, self.template_name, {"error": "Password atau Username salah"}
+            )
 
 
 def delete_user(request, id):
@@ -110,7 +110,7 @@ class AddUserView(CreateView):
             first_name=data["firstname"],
             last_name=data["lastname"],
             email=data["email"],
-            ttl=data["ttl"],
+            domisili=data["domisili"],
             alamat=data["alamat"],
             is_staff=True if data.get("is_staff") == "on" else False,
         )
@@ -131,6 +131,7 @@ class UpdateUserView(UpdateView):
         user.last_name = data["lastname"]
         user.alamat = data["alamat"]
         user.email = data["email"]
+        user.domisili = (data["domisili"],)
         user.is_staff = True if data.get("is_staff") == "on" else False
         user.save()
         return redirect("/dashboard/pengguna")
