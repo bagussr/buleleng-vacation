@@ -4,21 +4,63 @@ from django.core import serializers
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 from django.views.generic import CreateView, UpdateView
-from django.http.response import JsonResponse
+from django.http.response import JsonResponse, HttpResponseRedirect
 
 from auths.models import CustomUser
 from vacation.models import (
     Feedback,
     LoginWisataAnalytic,
+    ReportWisata,
+    ReservasiWisata,
     TravelAgency,
     Wisata,
     Kategori,
-    KategoriWisata,
     FotoWisata,
     WisataAgency,
+    Information,
 )
 
 # Create your views here.
+
+
+def delete_informasi(request, id):
+    informasi = Information.objects.get(pk=id)
+    informasi.delete()
+    return redirect("/dashboard/informasi")
+
+
+def add_report(request: HttpRequest):
+    if request.method.upper() == "POST":
+        data = request.POST
+        wisata = Wisata.objects.get(pk=data["wisata"])
+        ReportWisata.objects.create(
+            wisata=wisata, kunjungan=int(data["kunjungan"]), tanggal=data["tanggal"]
+        )
+        return HttpResponseRedirect("/dashboard/report")
+    return HttpResponseRedirect("/dashboard/report")
+
+
+def reassign_user_travel(request: HttpRequest, id: str):
+    travel = TravelAgency.objects.get(pk=id)
+    user = CustomUser.objects.get(pk=travel.user.id)
+    user.is_agency = False
+    user.save()
+    travel.user = None
+    travel.save()
+    return redirect("/dashboard/travel")
+
+
+def assign_user_travel(request: HttpRequest):
+    if request.method.upper() == "POST":
+        data = request.POST
+        user = CustomUser.objects.filter(id=data["user"]).first()
+        user.is_agency = True
+        user.save()
+        agency = TravelAgency.objects.filter(id=data["travel_id"]).first()
+        agency.user = user
+        agency.save()
+        return HttpResponseRedirect("/dashboard/travel")
+    return HttpResponseRedirect("/dashboard/travel")
 
 
 def rekomendation_vacation(request, id):
@@ -92,7 +134,6 @@ def add_feedback(request):
 def add_agency(request):
     data = request.POST
     _wisata = Wisata.objects.get(id=data.get("wisata_id"))
-    print(data.getlist("agencies[]", []))
     for x in data.getlist("agencies[]", []):
         _travel = TravelAgency.objects.get(id=x)
         if (
@@ -101,10 +142,9 @@ def add_agency(request):
             ).count()
             == 0
         ):
-            print(x)
             WisataAgency.objects.create(agency=_travel, wisata=_wisata)
     wisata_agency = WisataAgency.objects.filter(wisata_id=_wisata.id).all()
-    print(wisata_agency)
+
     if len(wisata_agency) > 0:
         for x in wisata_agency:
             if str(x.agency_id) not in data.getlist("agencies[]", []):
@@ -121,6 +161,12 @@ def detail_wisata(request, id):
 def detail_wisate_agency(request, id):
     wisata_agency = WisataAgency.objects.filter(wisata_id=id)
     return JsonResponse(serializers.serialize("json", wisata_agency), safe=False)
+
+
+class ReservasiForm(forms.ModelForm):
+    class Meta:
+        model = ReservasiWisata
+        fields = "__all__"
 
 
 class KategoriForm(forms.ModelForm):
@@ -147,9 +193,43 @@ class TravelAgencyForm(forms.ModelForm):
         fields = "__all__"
 
 
+class AddIformasiForm(forms.ModelForm):
+    class Meta:
+        model = Information
+        fields = "__all__"
+
+
+class AddInformasi(CreateView):
+    model = Information
+    form_class = AddIformasiForm
+
+    def post(self, request: HttpRequest, *args: str, **kwargs: Any) -> HttpResponse:
+        Information.objects.create(gambar_utama=request.FILES["gambar_utama"])
+        return redirect("/dashboard/informasi")
+
+
+class AddReservasi(CreateView):
+    model = ReservasiWisata
+    form_class = ReservasiForm
+
+    def post(self, request: HttpRequest, *args: str, **kwargs: Any) -> HttpResponse:
+        data = request.POST
+        wisata = Wisata.objects.filter(id=data["wisata_id"]).first()
+        ReservasiWisata.objects.create(
+            pembayaran=(request.FILES.get("pembayaran", None)),
+            nama=data["nama"],
+            no_wa=data["no_wa"],
+            hari=data["hari"],
+            jumlah=int(data["jumlah"]),
+            wisata=wisata,
+            user=request.user,
+        )
+        return redirect(f"/wisata/{wisata.nama}")
+
+
 class AddTravelAgency(CreateView):
     model = TravelAgency
-    form_class = KategoriForm
+    form_class = TravelAgencyForm
 
     def post(self, request: HttpRequest, *args: str, **kwargs: Any) -> HttpResponse:
         data = request.POST
@@ -194,18 +274,18 @@ class EditWisataView(UpdateView):
             else wisata.gambar_utama
         )
 
+        kategori = Kategori.objects.get(id=data["kategori"])
         wisata.nama = data["nama"]
         wisata.alamat = data["lokasi"]
         wisata.deskripsi = data["deskripsi"]
         wisata.emmet_tags = data["emmet_tag"]
+        wisata.biaya = data["biaya"]
+        wisata.no_rek = data["no_rek"]
+        wisata.bank = data["bank"]
+        wisata.kategori = kategori
         wisata.perizinan = perizinan
         wisata.gambar_utama = gambar
         wisata.save()
-
-        wisata_kategori = KategoriWisata.objects.filter(wisata_id=wisata.id).first()
-        kategori = Kategori.objects.get(id=data["kategori"])
-        wisata_kategori.kategori_id = kategori
-        wisata_kategori.save()
 
         return redirect("/dashboard/wisata")
 
@@ -225,14 +305,18 @@ class AddWisataView(CreateView):
             gambar_utama = request.FILES["gambar_utama"]
         else:
             perizinan = None
-        wisata = Wisata.objects.create(
+        Wisata.objects.create(
             nama=data["nama"],
             alamat=data["lokasi"],
             deskripsi=data["deskripsi"],
             emmet_tags=data["emmet_tag"],
+            no_rek=data["no_rek"],
+            biaya=data["biaya"],
+            bank=data["bank"],
             perizinan=perizinan,
             gambar_utama=gambar_utama,
+            kategori_id=kategori.id,
             user_id=request.user.id,
         )
-        KategoriWisata.objects.create(kategori_id=kategori, wisata_id=wisata)
+
         return redirect("/dashboard/wisata")

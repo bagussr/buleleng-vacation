@@ -1,0 +1,53 @@
+{% extends "layout.html" %}
+<!--  -->
+{% block content %}
+
+<div class="container" style="padding: 4rem 0">
+    <div class="row">
+        <h1>Berita dan Artikel</h1>
+        <div
+            class="mt-5"
+            style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem"
+        >
+            {% for item in artikel %}
+            <div
+                class="d-flex"
+                style="flex-direction: column; gap: 0.7rem; cursor: pointer"
+                btn="button-link"
+                data-url="/artikel/{{item.judul}}"
+            >
+                <img
+                    height="300"
+                    src="{{item.gambar.url}}"
+                    class="rounded-3"
+                    alt="..."
+                />
+                <div class="d-flex" style="flex-direction: column">
+                    <span class="d-flex justify-content-between">
+                        <p style="font-weight: 500; font-size: larger">
+                            {{item.judul}}
+                        </p>
+                    </span>
+                    <p style="font-weight: 400; font-size: medium">
+                        {{item.created_at}}
+                    </p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock content %} {% block javascript %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var btns = document.querySelectorAll("[btn='button-link']");
+        btns.forEach((button) => {
+            var link = button.getAttribute('data-url');
+
+            button.addEventListener('click', function () {
+                window.location = link;
+            });
+        });
+    });
+</script>
+{% endblock javascript %}

@@ -9,4 +9,10 @@ urlpatterns = [
     path("feedback", views.feedback, name="feedback"),
     path("kategori", views.kategori, name="kategori"),
     path("travel", views.travel, name="travel"),
+    path("artikel", views.artikel, name="artikel"),
+    path("kritik", views.kritik_saran, name="kritik_saran"),
+    path("report", views.report, name="report"),
+    path("informasi", views.informasi, name="informasi"),
+    path("reservasi", views.reservasi, name="reservasi_agency"),
+    path("reservasi_wisata", views.reservasi_wisata, name="reservasi_wisata"),
 ]

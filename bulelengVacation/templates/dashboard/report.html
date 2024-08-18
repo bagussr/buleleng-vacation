@@ -1,13 +1,14 @@
 {% extends "dashboard/layout.html" %}
 <!--  -->
-{% block title %} Dashboard | Kategori {% endblock %}
+{% block title %} Dashboard | Report {% endblock %}
 <!--  -->
 {% block content %}
 <div class="container">
     <div class="row">
-        <h1>Konfigurasi Kategori</h1>
+        <h1>Report Wisata</h1>
     </div>
     <div class="container p-4" style="background-color: white">
+        {% if request.user.is_staff and request.user.is_superuser == False %}
         <div class="row">
             <button
                 class="btn btn-primary"
@@ -16,57 +17,34 @@
                 data-bs-toggle="modal"
                 data-bs-target="#addModal"
             >
-                + Tambah Kategori
+                + Tambah Report
             </button>
+            {% endif %}
         </div>
+        {% if request.user.is_superuser %}
+        <div class="row mt-5 w-100">
+            <canvas id="myChart"></canvas>
+        </div>
+        {% endif %}
         <div class="row mt-3">
             <table class="table table-light">
                 <thead class="border text-center" style="font-weight: 600">
                     <tr>
                         <th scope="col" style="width: 60px">No</th>
-                        <th scope="col">Nama</th>
-
-                        <th scope="col" style="width: 180px">Action</th>
+                        <th scope="col">Nama Wisata</th>
+                        <th scope="col">Jumlah</th>
+                        <th scope="col" style="width: 180px">Tanggal</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for kategori in kategori %}
-                    <tr>
+                    {% for report in report %}
+                    <tr class="text-center">
                         <th scope="row" class="text-center">
                             {{forloop.counter}}
                         </th>
-                        <td>{{kategori.nama}}</td>
-
-                        <td>
-                            <div
-                                class="d-flex"
-                                style="width: fit-content; column-gap: 10px"
-                            >
-                                <button
-                                    class="btn btn-danger d-flex aligns-center"
-                                    name="delete-button"
-                                    data-delete="{{kategori.id}}"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#deleteModal"
-                                >
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        width="16"
-                                        height="16"
-                                        fill="currentColor"
-                                        class="bi bi-trash"
-                                        viewBox="0 0 16 16"
-                                    >
-                                        <path
-                                            d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"
-                                        />
-                                        <path
-                                            d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"
-                                        /></svg
-                                    >Hapus
-                                </button>
-                            </div>
-                        </td>
+                        <td>{{report.wisata.nama}}</td>
+                        <td>{{report.kunjungan}}</td>
+                        <td>{{report.tanggal}}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -83,12 +61,12 @@
     aria-hidden="true"
 >
     <div class="modal-dialog">
-        <form method="post" action="{% url 'add_kategori' %}">
+        <form method="post" action="{% url 'add_report' %}">
             {% csrf_token %}
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="addModalLabel">
-                        Tambah Kategori
+                        Tambah Report Harian
                     </h1>
                     <button
                         type="button"
@@ -100,14 +78,45 @@
                 <div class="modal-body">
                     <div class="mb-3">
                         <label for="exampleFormControlInput1" class="form-label"
-                            >Nama Kategori</label
+                            >Pilih Wisata</label
                         >
+                        <select
+                            class="form-select"
+                            aria-label="Default select example"
+                            name="wisata"
+                        >
+                            <option selected>
+                                Buka menu untuk memilih wisata
+                            </option>
+                            {% for item in wisata %}
+                            <option value="{{ item.id }}">
+                                {{ item.nama }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="Kunjungan" class="form-label"
+                            >Jumlah Pengunjung
+                        </label>
                         <input
+                            required
                             type="text"
                             class="form-control"
-                            name="nama"
-                            id="exampleFormControlInput1"
-                            placeholder="Wisata Laut"
+                            name="kunjungan"
+                            id="Kunjungan"
+                            pattern="[0-9]+"
+                            placeholder="100"
+                        />
+                    </div>
+                    <div class="mb-3">
+                        <label for="tanggal" class="form-label">Tanggal </label>
+                        <input
+                            required
+                            type="date"
+                            class="form-control"
+                            name="tanggal"
+                            id="tanggal"
                         />
                     </div>
                 </div>
@@ -167,6 +176,36 @@
 
 {% endblock content %} {% block javascript %}
 <script>
+    const ctx = document.getElementById('myChart');
+    var labels = [];
+    var datas = []
+
+    {% for item in analytic %}
+      labels.push("{{item.wisata}}")
+      datas.push({{item.dcount  }})
+    {% endfor %}
+
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: labels,
+        datasets: [
+        {
+          label: 'Analisis Wisata di Akses',
+          data: datas,
+          borderWidth: 1
+        }
+        ]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+
     document.addEventListener('DOMContentLoaded', () => {
         var deleteButtons = document.querySelectorAll("[name='delete-button']");
 

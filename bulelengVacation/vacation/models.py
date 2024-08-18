@@ -17,7 +17,13 @@ class Wisata(models.Model):
     perizinan = models.ImageField(upload_to="wisata/izin", null=True, blank=True)
     gambar_utama = models.ImageField(upload_to="wisata", null=True, blank=True)
     pilihan = models.BooleanField(default=False)
+    no_rek = models.CharField(max_length=100, null=True, blank=True)
+    bank = models.CharField(max_length=100, null=True, blank=True)
+    biaya = models.CharField(max_length=255, null=True, blank=True)
 
+    kategori = models.ForeignKey(
+        Kategori, on_delete=models.SET_NULL, null=True, blank=True
+    )
     user = models.ForeignKey(
         CustomUser, on_delete=models.CASCADE, null=True, blank=True
     )
@@ -37,10 +43,13 @@ class Wisata(models.Model):
             "perizinan": self.perizinan,
             "emmet_tag": self.emmet_tags,
             "gambar_utama": self.gambar_utama,
-            "kategori": self.kategoriwisata_set.first().kategori_id.nama,
+            "kategori": self.kategori.nama if self.kategori else None,
             "rating": rate,
             "pilihan": self.pilihan,
             "gambar_lain": photos,
+            "no_rek": self.no_rek,
+            "bank": self.bank,
+            "biaya": self.biaya,
         }
 
     def to_dict(self):
@@ -50,14 +59,12 @@ class Wisata(models.Model):
             "alamat": self.alamat,
             "emmet_tag": self.emmet_tags,
             "deskripsi": self.deskripsi,
-            "kategori": self.kategoriwisata_set.first().kategori_id.id,
+            "kategori": self.kategori.nama if self.kategori else None,
             "pilihan": self.pilihan,
+            "no_rek": self.no_rek,
+            "bank": self.bank,
+            "biaya": self.biaya,
         }
-
-
-class KategoriWisata(models.Model):
-    kategori_id = models.ForeignKey(Kategori, on_delete=models.CASCADE)
-    wisata_id = models.ForeignKey(Wisata, on_delete=models.CASCADE)
 
 
 class FotoWisata(models.Model):
@@ -101,6 +108,10 @@ class TravelAgency(models.Model):
     logo = models.ImageField(upload_to="agency/")
     website = models.TextField(null=True, blank=True)
 
+    user = models.ForeignKey(
+        CustomUser, on_delete=models.CASCADE, null=True, blank=True
+    )
+
 
 class WisataAgency(models.Model):
     wisata = models.ForeignKey(Wisata, on_delete=models.CASCADE)
@@ -111,3 +122,39 @@ class LoginWisataAnalytic(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     wisata = models.ForeignKey(Wisata, on_delete=models.CASCADE)
     created_at = models.DateField(auto_now_add=True, null=True, blank=True)
+
+
+class ReportWisata(models.Model):
+    kunjungan = models.IntegerField(default=0, null=False, blank=False)
+    tanggal = models.DateField(null=True, blank=True)
+    wisata = models.ForeignKey(Wisata, on_delete=models.CASCADE)
+    created_at = models.DateField(auto_now_add=True, null=True, blank=True)
+
+
+class ReservasiWisata(models.Model):
+    pembayaran = models.ImageField(
+        upload_to="wisata/pemabayaran", null=True, blank=True
+    )
+    online = models.BooleanField(default=False)
+    nama = models.CharField(max_length=255)
+    no_wa = models.CharField(max_length=15)
+    hari = models.DateField()
+    jumlah = models.IntegerField()
+    wisata = models.ForeignKey(Wisata, on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        CustomUser, on_delete=models.CASCADE, null=True, blank=True
+    )
+    created_at = models.DateField(auto_now_add=True, null=True, blank=True)
+
+
+class KritikSaran(models.Model):
+    text = models.TextField()
+
+    user = models.ForeignKey(
+        CustomUser, on_delete=models.CASCADE, null=True, blank=True
+    )
+    created_at = models.DateField(auto_now_add=True, null=True, blank=True)
+
+
+class Information(models.Model):
+    gambar_utama = models.ImageField(upload_to="information", null=True, blank=True)

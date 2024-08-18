@@ -1,0 +1,365 @@
+{% extends "dashboard/layout.html" %}
+<!--  -->
+{% block title %} Dashboard | Artikel {% endblock %}
+<!--  -->
+{% block content %}
+<div class="container">
+    <div class="row">
+        <h1>Arikel</h1>
+    </div>
+    <div class="container p-4" style="background-color: white">
+        <div class="row">
+            <button
+                class="btn btn-primary"
+                style="width: fit-content"
+                id="add-button"
+                data-bs-toggle="modal"
+                data-bs-target="#addModal"
+            >
+                + Tambah Artikel
+            </button>
+        </div>
+        <div class="row mt-3" style="overflow: auto">
+            <table class="table table-light">
+                <thead class="border text-center" style="font-weight: 600">
+                    <tr>
+                        <th scope="col" style="width: 60px">No</th>
+                        <th scope="col" style="width: 120px !important">
+                            Judul
+                        </th>
+                        <th scope="col">Gambar</th>
+                        <th scope="col" style="width: 360px">Text</th>
+                        <th scope="col" style="width: 80px">Tanggal</th>
+                        <th scope="col" style="width: 180px">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in artikel %}
+                    <tr class="text-center">
+                        <th scope="row" class="text-center">
+                            {{forloop.counter}}
+                        </th>
+                        <td style="width: 120px !important">{{item.judul}}</td>
+                        <td>
+                            <img width="200" src="{{item.gambar.url}}" alt="" />
+                        </td>
+                        <td class="text-center" style="width: 360px">
+                            {{item.content}}
+                        </td>
+                        <td style="width: 80px">
+                            {{item.created_at|date:'Y M d'}}
+                        </td>
+                        <td>
+                            <div
+                                class="d-flex"
+                                style="
+                                    width: fit-content;
+                                    column-gap: 10px;
+                                    flex-wrap: wrap;
+                                    justify-content: space-evenly;
+                                    row-gap: 8px;
+                                "
+                            >
+                                <button
+                                    class="btn btn-primary d-flex aligns-center"
+                                    style="height: 2.4rem"
+                                    name="edit-button"
+                                    data-edit="{{item.id}}"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#editModal"
+                                >
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="16"
+                                        height="16"
+                                        fill="currentColor"
+                                        class="bi bi-pencil"
+                                        viewBox="0 0 16 16"
+                                    >
+                                        <path
+                                            d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"
+                                        />
+                                    </svg>
+                                </button>
+                                <button
+                                    style="height: 2.4rem"
+                                    class="btn btn-danger d-flex aligns-center"
+                                    name="delete-button"
+                                    data-delete="{{item.id}}"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#deleteModal"
+                                >
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="16"
+                                        height="16"
+                                        fill="currentColor"
+                                        class="bi bi-trash"
+                                        viewBox="0 0 16 16"
+                                    >
+                                        <path
+                                            d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"
+                                        />
+                                        <path
+                                            d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"
+                                        />
+                                    </svg>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div
+    class="modal fade"
+    id="addModal"
+    tabindex="-1"
+    aria-labelledby="addModalLabel"
+    aria-hidden="true"
+>
+    <div class="modal-dialog">
+        <form
+            method="post"
+            action="{% url 'add_artikel' %}"
+            enctype="multipart/form-data"
+        >
+            {% csrf_token %}
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="addModalLabel">
+                        Tambah Artikel
+                    </h1>
+                    <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                    ></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="exampleFormControlInput1" class="form-label"
+                            >Judul Artikel</label
+                        >
+                        <input
+                            type="text"
+                            class="form-control"
+                            name="judul"
+                            id="exampleFormControlInput1"
+                            placeholder="Wisata Laut xxxxx"
+                        />
+                    </div>
+                    <div class="mb-3">
+                        <label
+                            for="exampleFormControlTextarea1"
+                            class="form-label"
+                            >Konten</label
+                        >
+                        <textarea
+                            required
+                            class="form-control"
+                            id="exampleFormControlTextarea1"
+                            name="text"
+                            rows="10"
+                        ></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="formFile" class="form-label"
+                            >Gambar Utama</label
+                        >
+                        <input
+                            required
+                            class="form-control"
+                            type="file"
+                            accept="image/png, image/gif, image/jpeg"
+                            id="formFile"
+                            name="gambar"
+                        />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button
+                        type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal"
+                    >
+                        Batal
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        Tambah
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div
+    class="modal fade"
+    id="deleteModal"
+    tabindex="-1"
+    aria-labelledby="deleteModalLabel"
+    aria-hidden="true"
+>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="deleteModalLabel">
+                    Hapus Kategori
+                </h1>
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                ></button>
+            </div>
+            <div class="modal-body">Apakah yakin untuk menghapus kategori?</div>
+            <div class="modal-footer">
+                <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-bs-dismiss="modal"
+                >
+                    Batal
+                </button>
+                <a type="button" class="btn btn-danger" id="delete-url"
+                    >Hapus</a
+                >
+            </div>
+        </div>
+    </div>
+</div>
+
+<div
+    class="modal fade"
+    id="editModal"
+    tabindex="-1"
+    aria-labelledby="editModalLabel"
+    aria-hidden="true"
+>
+    <div class="modal-dialog">
+        <form id="form-edit" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="editModalLabel">
+                        Edit Wisata
+                    </h1>
+                    <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                    ></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="nama-edit" class="form-label"
+                            >Nama Artikel</label
+                        >
+                        <input
+                            type="text"
+                            class="form-control"
+                            name="judul"
+                            id="nama-edit"
+                            placeholder="Buleleng"
+                        />
+                    </div>
+                    <div class="mb-3">
+                        <label for="deskripsi-edit" class="form-label"
+                            >Kontent</label
+                        >
+                        <textarea
+                            class="form-control"
+                            id="deskripsi-edit"
+                            name="content"
+                            rows="10"
+                        ></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="formFile" class="form-label"
+                            >Gambar Utama (Optional *upload untuk merubah
+                            gambar)</label
+                        >
+                        <input
+                            class="form-control"
+                            type="file"
+                            accept="image/png, image/gif, image/jpeg"
+                            name="gambar"
+                            id="formFile"
+                        />
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button
+                        type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal"
+                    >
+                        Batal
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        Simpan
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock content %}
+<!--  -->
+{% block javascript %}
+<script>
+    var editButtons = document.querySelectorAll("[name='edit-button']");
+    editButtons.forEach((button) => {
+        button.addEventListener('click', function () {
+            var form = document
+                .getElementById('form-edit')
+                .getElementsByTagName('input');
+            var area = document
+                .getElementById('form-edit')
+                .getElementsByTagName('textarea');
+            document
+                .getElementById('form-edit')
+                .setAttribute(
+                    'action',
+                    '/artikel/edit/' + this.getAttribute('data-edit')
+                );
+            xhr = new XMLHttpRequest();
+            xhr.open(
+                'GET',
+                '/artikel/detail/' + this.getAttribute('data-edit'),
+                true
+            );
+            xhr.send();
+            xhr.onload = (e) => {
+                data = JSON.parse(xhr.response);
+                form['nama-edit'].value = data.judul;
+                area['deskripsi-edit'].value = data.content;
+            };
+        });
+    });
+
+    var deleteButtons = document.querySelectorAll("[name='delete-button']");
+
+    deleteButtons.forEach((button) => {
+        button.addEventListener('click', function () {
+            document
+                .getElementById('delete-url')
+                .setAttribute(
+                    'href',
+                    '/artikel/delete/' + this.getAttribute('data-delete')
+                );
+        });
+    });
+</script>
+
+{% endblock %}

@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "auths",
     "vacation",
     "dashboard",
+    "article",
 ]
 
 MIDDLEWARE = [

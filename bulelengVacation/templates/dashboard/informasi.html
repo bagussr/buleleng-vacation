@@ -1,11 +1,11 @@
 {% extends "dashboard/layout.html" %}
 <!--  -->
-{% block title %} Dashboard | Kategori {% endblock %}
+{% block title %} Dashboard | Informasi {% endblock %}
 <!--  -->
 {% block content %}
 <div class="container">
     <div class="row">
-        <h1>Konfigurasi Kategori</h1>
+        <h1>Konfigurasi Informasi</h1>
     </div>
     <div class="container p-4" style="background-color: white">
         <div class="row">
@@ -16,7 +16,7 @@
                 data-bs-toggle="modal"
                 data-bs-target="#addModal"
             >
-                + Tambah Kategori
+                + Tambah Informasi
             </button>
         </div>
         <div class="row mt-3">
@@ -30,12 +30,18 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for kategori in kategori %}
+                    {% for infor in informasi %}
                     <tr>
                         <th scope="row" class="text-center">
                             {{forloop.counter}}
                         </th>
-                        <td>{{kategori.nama}}</td>
+                        <td>
+                            <img
+                                width="200"
+                                src="{{infor.gambar_utama.url}}"
+                                alt=""
+                            />
+                        </td>
 
                         <td>
                             <div
@@ -45,7 +51,7 @@
                                 <button
                                     class="btn btn-danger d-flex aligns-center"
                                     name="delete-button"
-                                    data-delete="{{kategori.id}}"
+                                    data-delete="{{infor.id}}"
                                     data-bs-toggle="modal"
                                     data-bs-target="#deleteModal"
                                 >
@@ -83,12 +89,16 @@
     aria-hidden="true"
 >
     <div class="modal-dialog">
-        <form method="post" action="{% url 'add_kategori' %}">
+        <form
+            method="post"
+            action="{% url 'add_informasi' %}"
+            enctype="multipart/form-data"
+        >
             {% csrf_token %}
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="addModalLabel">
-                        Tambah Kategori
+                        Tambah Informasi
                     </h1>
                     <button
                         type="button"
@@ -99,15 +109,16 @@
                 </div>
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label for="exampleFormControlInput1" class="form-label"
-                            >Nama Kategori</label
+                        <label for="formFile" class="form-label"
+                            >Gambar Utama</label
                         >
                         <input
-                            type="text"
+                            required
                             class="form-control"
-                            name="nama"
-                            id="exampleFormControlInput1"
-                            placeholder="Wisata Laut"
+                            type="file"
+                            accept="image/png, image/gif, image/jpeg"
+                            id="formFile"
+                            name="gambar_utama"
                         />
                     </div>
                 </div>
@@ -176,7 +187,7 @@
                     .getElementById('delete-url')
                     .setAttribute(
                         'href',
-                        '/wisata/kategori/delete/' +
+                        '/wisata/informasi/delete/' +
                             this.getAttribute('data-delete')
                     );
             });

@@ -29,6 +29,7 @@
                         <th scope="col">Alamat</th>
                         <th scope="col">Domisili</th>
                         <th scope="col" style="width: 80px">Staff</th>
+                        <th scope="col" style="width: 80px">Staff Agency</th>
                         <th scope="col" style="width: 180px">Action</th>
                     </tr>
                 </thead>
@@ -43,6 +44,7 @@
                         <td>{{user.alamat}}</td>
                         <td>{{user.domisili}}</td>
                         <td>{{user.is_staff}}</td>
+                        <td>{{user.is_agency}}</td>
                         <td>
                             <div
                                 class="d-flex"
@@ -418,7 +420,10 @@
                     form['lastname-edit'].value = data.last_name;
                     form['alamat-edit'].value = data.alamat;
                     form['domisili-edit'].value = data.domisili;
-                    form['is_staff-edit'].checked = data.is_staff
+                    form['is_agency-edit'].checked = data.is_agency
+                        ? true
+                        : false;
+                    form['is_agency-edit'].checked = data.is_agency
                         ? true
                         : false;
                 };

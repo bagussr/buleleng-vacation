@@ -8,7 +8,7 @@
     <div class="row">
         <h1>Konfigurasi Travel</h1>
     </div>
-    <div class="container p-4" style="background-color: white">
+    <div class="container p-4" style="background-color: white; overflow: auto">
         <div class="row">
             <button
                 class="btn btn-primary"
@@ -42,19 +42,75 @@
                             {{forloop.counter}}
                         </th>
                         <td>
-                            <img width="80" src="{{agency.logo.url}}" alt="" />
+                            <img
+                                width="80"
+                                src="{{agency.logo.url}}"
+                                alt="{{agency.nama}}"
+                            />
                         </td>
                         <td>{{agency.nama}}</td>
                         <td>{{agency.kontak}}</td>
                         <td>{{agency.alamat}}</td>
                         <td>{{agency.deskripsi}}</td>
                         <td>{{agency.website}}</td>
-
                         <td>
                             <div
                                 class="d-flex"
-                                style="width: fit-content; column-gap: 10px"
+                                style="
+                                    width: fit-content;
+                                    row-gap: 10px;
+                                    flex-direction: column;
+                                "
                             >
+                                {% if agency.user is None %}
+                                <button
+                                    class="btn btn-warning"
+                                    name="assign-button"
+                                    data-assign="{{agency.id}}"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#assignModal"
+                                >
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="16"
+                                        height="16"
+                                        fill="currentColor"
+                                        class="bi bi-person-fill-add"
+                                        viewBox="0 0 16 16"
+                                    >
+                                        <path
+                                            d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m.5-5v1h1a.5.5 0 0 1 0 1h-1v1a.5.5 0 0 1-1 0v-1h-1a.5.5 0 0 1 0-1h1v-1a.5.5 0 0 1 1 0m-2-6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"
+                                        />
+                                        <path
+                                            d="M2 13c0 1 1 1 1 1h5.256A4.5 4.5 0 0 1 8 12.5a4.5 4.5 0 0 1 1.544-3.393Q8.844 9.002 8 9c-5 0-6 3-6 4"
+                                        />
+                                    </svg>
+                                    Asign
+                                </button>
+                                {% else %}
+                                <a
+                                    class="btn btn-warning"
+                                    name="assign-button"
+                                    href="{% url 'reassign_user' id=agency.id %}"
+                                >
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="16"
+                                        height="16"
+                                        fill="currentColor"
+                                        class="bi bi-person-fill-add"
+                                        viewBox="0 0 16 16"
+                                    >
+                                        <path
+                                            d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m.5-5v1h1a.5.5 0 0 1 0 1h-1v1a.5.5 0 0 1-1 0v-1h-1a.5.5 0 0 1 0-1h1v-1a.5.5 0 0 1 1 0m-2-6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"
+                                        />
+                                        <path
+                                            d="M2 13c0 1 1 1 1 1h5.256A4.5 4.5 0 0 1 8 12.5a4.5 4.5 0 0 1 1.544-3.393Q8.844 9.002 8 9c-5 0-6 3-6 4"
+                                        />
+                                    </svg>
+                                    Re Asign
+                                </a>
+                                {% endif %}
                                 <button
                                     class="btn btn-danger d-flex aligns-center"
                                     name="delete-button"
@@ -247,14 +303,75 @@
     </div>
 </div>
 
-{% endblock content %} {% block javascript %}
+<div
+    class="modal fade"
+    id="assignModal"
+    tabindex="-1"
+    aria-labelledby="assignModalLabel"
+    aria-hidden="true"
+>
+    <div class="modal-dialog">
+        <form
+            class="modal-content"
+            method="post"
+            action="{% url 'assign_user' %}"
+        >
+            {% csrf_token %}
+            <input type="hidden" name="travel_id" id="form-assign" />
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="assignModalLabel">
+                    Asign User Travel
+                </h1>
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                ></button>
+            </div>
+            <div class="modal-body">
+                <label for="user">Pilih user untuk mengelola agensi</label>
+                <select
+                    class="form-select"
+                    aria-label="Default select example"
+                    name="user"
+                    id="user"
+                >
+                    <option selected>Buka menu untuk memilih User</option>
+                    {% for item in user %}
+                    <option value="{{ item.id }}">{{ item.username }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="modal-footer">
+                <button
+                    type="submit"
+                    class="btn btn-secondary"
+                    data-bs-dismiss="modal"
+                >
+                    Simpan
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock content %}
+<!--  -->
+{% block javascript %}
 <script>
     document.addEventListener('DOMContentLoaded', () => {
+        var assignButton = document.querySelectorAll("[name='assign-button']");
+        assignButton.forEach((button) => {
+            button.addEventListener('click', function () {
+                var id = this.getAttribute('data-assign');
+                var form = document.getElementById('form-assign');
+                form.value = id;
+            });
+        });
         var deleteButtons = document.querySelectorAll("[name='delete-button']");
-        console.log(deleteButtons);
         deleteButtons.forEach((button) => {
             button.addEventListener('click', function () {
-                console.log(this.getAttribute('data-delete'));
                 document
                     .getElementById('delete-url')
                     .setAttribute(

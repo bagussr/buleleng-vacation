@@ -1,802 +1,695 @@
-{% extends "dashboard/layout.html" %} {% block content %}
-<div class="container">
-    <div class="row">
-        <h1>Konfigurasi Wisata</h1>
-    </div>
-    <div class="container p-4" style="background-color: white">
+{% extends "dashboard/layout.html" %}
+<!--  -->
+{% block title %}Dashboard | Wisata{% endblock %}
+<!--  -->
+{% block content %}
+    <div class="container">
         <div class="row">
-            <button
-                class="btn btn-primary"
-                style="width: fit-content"
-                id="add-button"
-                data-bs-toggle="modal"
-                data-bs-target="#addModal"
-            >
-                + Tambah Wisata
-            </button>
+            <h1>Konfigurasi Wisata</h1>
         </div>
-        <div class="row mt-3">
-            <table class="table table-light">
-                <thead class="border text-center" style="font-weight: 600">
-                    <tr>
-                        <th scope="col" style="width: 60px">No</th>
-                        <th scope="col">Nama</th>
-                        <th scope="col" style="width: 200px">Lokasi</th>
-                        <th scope="col" style="width: 200px">Kategori</th>
-                        <th scope="col">Detail</th>
-                        <th scope="col" style="width: 20px">Rating</th>
-                        <th scope="col">Perizinan</th>
-                        <th scope="col">Gambar</th>
-                        <th scope="col">Gambar Tambahan</th>
-                        <th scope="col" style="width: 180px">Action</th>
-                    </tr>
-                </thead>
-                <tbody style="overflow: hidden">
-                    {% for wisata in wisata %}
-                    <tr class="text-center">
-                        <th scope="row" class="text-center">
-                            {{ forloop.counter }}
-                        </th>
-                        <td>{{wisata.nama}}</td>
-                        <td>
-                            <p class="elipsis">{{wisata.alamat}}</p>
-                        </td>
-                        <td>{{wisata.kategori}}</td>
-                        <td>
-                            <button
-                                name="button-deskripsi"
-                                data-deskripsi="{{wisata.deskripsi}}"
-                                class="btn btn-primary"
-                                data-bs-toggle="modal"
-                                data-bs-target="#deskripsiModal"
-                            >
-                                Deskripsi
-                            </button>
-                        </td>
-                        <td class="text-center">{{wisata.rating}}</td>
-                        <td>
-                            <button
-                                name="button-perizinan"
-                                data-perizinan="{{wisata.perizinan.url}}"
-                                class="btn btn-primary"
-                                data-bs-toggle="modal"
-                                data-bs-target="#perizinanModal"
-                            >
-                                Perizinan
-                            </button>
-                        </td>
-                        <td>
-                            <button
-                                name="button-gambar"
-                                data-gambar="{{wisata.gambar_utama.url}}"
-                                class="btn btn-primary"
-                                data-bs-toggle="modal"
-                                data-bs-target="#gambarModal"
-                            >
-                                Gambar
-                            </button>
-                        </td>
-                        <td>
-                            <button
-                                name="button-gambar-lain"
-                                data-add="{{wisata.id}}"
-                                class="btn btn-primary"
-                                data-bs-toggle="modal"
-                                data-bs-target="#gambarLainModal"
-                            >
-                                Gambar Tambahan
-                            </button>
-                        </td>
-                        <td>
-                            <div
-                                class="d-flex"
-                                style="width: fit-content; column-gap: 10px; flex-wrap: wrap; justify-content: space-evenly; row-gap: 8px;"
-                            >
-                                <button
-                                    class="btn btn-primary d-flex aligns-center"
-                                    style="height: 2.4rem;"
-                                    name="edit-button"
-                                    data-edit="{{wisata.id}}"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#editModal"
-                                >
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        width="16"
-                                        height="16"
-                                        fill="currentColor"
-                                        class="bi bi-pencil"
-                                        viewBox="0 0 16 16"
-                                    >
-                                        <path
-                                            d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"
-                                        /></svg
-                                    >
-                                </button>
-                                <button
-                                style="height: 2.4rem;"
-                                class="btn btn-info d-flex aligns-center"
-                                name="travel-button"
-                                data-wisata="{{wisata.id}}"
-                                data-bs-toggle="modal"
-                                data-bs-target="#travelModal"
-                            >
-                            <svg width="512" height="512" viewBox="0 0 512 512" style="color:currentColor" xmlns="http://www.w3.org/2000/svg" class="h-full w-full"><rect width="512" height="512" x="0" y="0" rx="30" fill="transparent" stroke="transparent" stroke-width="0" stroke-opacity="100%" paint-order="stroke"></rect><svg width="406px" height="406px" viewBox="0 0 24 24" fill="currentColor" x="53" y="53" role="img" style="display:inline-block;vertical-align:middle" xmlns="http://www.w3.org/2000/svg"><g fill="currentColor"><path fill="currentColor" d="M20 6h-3V4c0-1.11-.89-2-2-2H9c-1.11 0-2 .89-2 2v2H4c-1.11 0-2 .89-2 2v11c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zM9 4h6v2H9V4zm11 15H4v-2h16v2zm0-5H4V8h3v2h2V8h6v2h2V8h3v6z"/></g></svg></svg>
-                            </button>
-                            {% if request.user.is_superuser %}
-                                <a
-                                style="height: 2.4rem;"
-                                href="{% url 'edit_wisata_pilihan' id=wisata.id %}"
-                                {% if wisata.pilihan %}
-                                class="btn btn-success d-flex aligns-center"
-                                {% else %}
-                                class="btn btn-secondary d-flex aligns-center"
-                                {% endif %}
-                                >
-                                <svg width="512" height="512" viewBox="0 0 512 512" style="color:currentColor" xmlns="http://www.w3.org/2000/svg" class="h-full w-full"><rect width="512" height="512" x="0" y="0" rx="30" fill="transparent" stroke="transparent" stroke-width="0" stroke-opacity="100%" paint-order="stroke"></rect><svg width="256px" height="256px" viewBox="0 0 24 24" fill="currentColor" x="128" y="128" role="img" style="display:inline-block;vertical-align:middle" xmlns="http://www.w3.org/2000/svg"><g fill="currentColor"><g fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="m8 12.5l3 3l5-6"/><circle cx="12" cy="12" r="10"/></g></g></svg></svg>
-                                <a/>
-                            {% endif %}
-                                <button
-                                    style="height: 2.4rem;"
-                                    class="btn btn-danger d-flex aligns-center"
-                                    name="delete-button"
-                                    data-delete="{{wisata.id}}"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#deleteModal"
-                                >
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        width="16"
-                                        height="16"
-                                        fill="currentColor"
-                                        class="bi bi-trash"
-                                        viewBox="0 0 16 16"
-                                    >
-                                        <path
-                                            d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"
-                                        />
-                                        <path
-                                            d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"
-                                        /></svg
-                                    >
-                                </button>
+        <div class="container p-4" style="background-color: white">
+            <div class="row">
+                <button class="btn btn-primary"
+                        style="width: fit-content"
+                        id="add-button"
+                        data-bs-toggle="modal"
+                        data-bs-target="#addModal">+ Tambah Wisata</button>
+            </div>
+            <div class="row mt-3" style="overflow: auto">
+                <table class="table table-light">
+                    <thead class="border text-center" style="font-weight: 600">
+                        <tr>
+                            <th scope="col" style="width: 60px">No</th>
+                            <th scope="col">Nama</th>
+                            <th scope="col">Biaya</th>
+                            <th scope="col" style="width: 200px">Lokasi</th>
+                            <th scope="col" style="width: 200px">Kategori</th>
+                            <th scope="col">Detail</th>
+                            <th scope="col" style="width: 20px">Rating</th>
+                            <th scope="col">Perizinan</th>
+                            <th scope="col">Gambar</th>
+                            <th scope="col">Gambar Tambahan</th>
+                            <th scope="col" style="width: 180px">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for wisata in wisata %}
+                            <tr class="text-center">
+                                <th scope="row" class="text-center">{{ forloop.counter }}</th>
+                                <td>{{ wisata.nama }}</td>
+                                <td>{{ wisata.biaya }}</td>
+                                <td>
+                                    <p class="elipsis">{{ wisata.alamat }}</p>
+                                </td>
+                                <td>{{ wisata.kategori }}</td>
+                                <td>
+                                    <button name="button-deskripsi"
+                                            data-deskripsi="{{ wisata.deskripsi }}"
+                                            class="btn btn-primary"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#deskripsiModal">Deskripsi</button>
+                                </td>
+                                <td class="text-center">{{ wisata.rating }}</td>
+                                <td>
+                                    <button name="button-perizinan"
+                                            data-perizinan="{{ wisata.perizinan.url }}"
+                                            class="btn btn-primary"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#perizinanModal">Perizinan</button>
+                                </td>
+                                <td>
+                                    <button name="button-gambar"
+                                            data-gambar="{{ wisata.gambar_utama.url }}"
+                                            class="btn btn-primary"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#gambarModal">Gambar</button>
+                                </td>
+                                <td>
+                                    <button name="button-gambar-lain"
+                                            data-add="{{ wisata.id }}"
+                                            class="btn btn-primary"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#gambarLainModal">Gambar Tambahan</button>
+                                </td>
+                                <td>
+                                    <div class="d-flex"
+                                         style="width: fit-content;
+                                                column-gap: 10px;
+                                                flex-wrap: wrap;
+                                                justify-content: space-evenly;
+                                                row-gap: 8px">
+                                        <button class="btn btn-primary d-flex aligns-center"
+                                                style="height: 2.4rem"
+                                                name="edit-button"
+                                                data-edit="{{ wisata.id }}"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#editModal">
+                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                 width="16"
+                                                 height="16"
+                                                 fill="currentColor"
+                                                 class="bi bi-pencil"
+                                                 viewBox="0 0 16 16">
+                                                <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325" />
+                                            </svg>
+                                        </button>
+                                        <button style="height: 2.4rem"
+                                                class="btn btn-info d-flex aligns-center"
+                                                name="travel-button"
+                                                data-wisata="{{ wisata.id }}"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#travelModal">
+                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                 width="16"
+                                                 height="16"
+                                                 fill="currentColor"
+                                                 class="bi bi-suitcase-lg"
+                                                 viewBox="0 0 16 16">
+                                                <path d="M5 2a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2h3.5A1.5 1.5 0 0 1 16 3.5v9a1.5 1.5 0 0 1-1.5 1.5H14a.5.5 0 0 1-1 0H3a.5.5 0 0 1-1 0h-.5A1.5 1.5 0 0 1 0 12.5v-9A1.5 1.5 0 0 1 1.5 2zm1 0h4a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1M1.5 3a.5.5 0 0 0-.5.5v9a.5.5 0 0 0 .5.5H3V3zM15 12.5v-9a.5.5 0 0 0-.5-.5H13v10h1.5a.5.5 0 0 0 .5-.5m-3 .5V3H4v10z" />
+                                            </svg>
+                                        </button>
+                                        {% if request.user.is_superuser %}
+                                            <a
+                                                style="height: 2.4rem"
+                                                href="{% url 'edit_wisata_pilihan' id=wisata.id %}"
+                                                {% if wisata.pilihan %}
+                                                class="btn btn-success d-flex aligns-center"
+                                                {% else %}
+                                                class="btn btn-secondary d-flex aligns-center"
+                                                {% endif %}
+                                                >
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-circle" viewBox="0 0 16 16">
+                                                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                                                    <path d="m10.97 4.97-.02.022-3.473 4.425-2.093-2.094a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05"/>
+                                                  </svg>
+                                            </a>
+                                        {% endif %}
+                                        <button style="height: 2.4rem"
+                                                class="btn btn-danger d-flex aligns-center"
+                                                name="delete-button"
+                                                data-delete="{{ wisata.id }}"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#deleteModal">
+                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                 width="16"
+                                                 height="16"
+                                                 fill="currentColor"
+                                                 class="bi bi-trash"
+                                                 viewBox="0 0 16 16">
+                                                <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z" />
+                                                <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="modal fade"
+             id="addModal"
+             tabindex="-1"
+             aria-labelledby="addModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog">
+                <form method="post"
+                      action="{% url 'add_wisata' %}"
+                      enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="addModalLabel">Tambah Wisata</h1>
+                            <button type="button"
+                                    class="btn-close"
+                                    data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="exampleFormControlInput2" class="form-label">Nama Wisata</label>
+                                <input required
+                                       type="text"
+                                       class="form-control"
+                                       name="nama"
+                                       id="exampleFormControlInput2"
+                                       placeholder="Namexxx" />
                             </div>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+                            <div class="mb-3">
+                                <label for="exampleFormControlInput3" class="form-label">Lokasi</label>
+                                <input required
+                                       type="text"
+                                       class="form-control"
+                                       name="lokasi"
+                                       id="exampleFormControlInput3"
+                                       placeholder="Indonesia, xxx" />
+                            </div>
+                            <div class="mb-3">
+                                <label for="emmet_tag" class="form-label">
+                                    Emmet Tag (Masukan lokasi ambil dari embed
+                                    google maps)
+                                </label>
+                                <input required
+                                       type="text"
+                                       class="form-control"
+                                       name="emmet_tag"
+                                       id="emmet_tag"
+                                       placeholder="Jl. Xxxxx" />
+                            </div>
+                            <div class="mb-3">
+                                <label for="exampleFormControlTextarea1" class="form-label">Deskripsi</label>
+                                <textarea required
+                                          class="form-control"
+                                          id="exampleFormControlTextarea1"
+                                          name="deskripsi"
+                                          rows="3"></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="biaya" class="form-label">Biaya</label>
+                                <input required
+                                       type="text"
+                                       class="form-control"
+                                       name="biaya"
+                                       id="biaya"
+                                       pattern="[0-9]+"
+                                       placeholder="100xxx" />
+                            </div>
+                            <div class="mb-3">
+                                <label for="no_rek" class="form-label">No Rek</label>
+                                <input required
+                                       type="text"
+                                       class="form-control"
+                                       name="no_rek"
+                                       id="no_rek"
+                                       pattern="[0-9]+"
+                                       placeholder="100xxx" />
+                            </div>
+                            <div class="mb-3">
+                                <label for="bank" class="form-label">Bank</label>
+                                <input required
+                                       type="text"
+                                       class="form-control"
+                                       name="bank"
+                                       id="bank"
+                                       placeholder="Bank xxx" />
+                            </div>
+                            <select class="form-select"
+                                    aria-label="Default select example"
+                                    name="kategori">
+                                <option selected>Buka menu untuk memilih kategori</option>
+                                {% for kategori in kategori %}<option value="{{ kategori.id }}">{{ kategori.nama }}</option>{% endfor %}
+                            </select>
+                            <div class="mb-3">
+                                <label for="formFile" class="form-label">Perizinan</label>
+                                <input required
+                                       class="form-control"
+                                       type="file"
+                                       accept="image/png, image/gif, image/jpeg"
+                                       id="formFile"
+                                       name="perizinan" />
+                            </div>
+                            <div class="mb-3">
+                                <label for="formFile" class="form-label">Gambar Utama</label>
+                                <input required
+                                       class="form-control"
+                                       type="file"
+                                       accept="image/png, image/gif, image/jpeg"
+                                       id="formFile"
+                                       name="gambar_utama" />
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                            <button type="submit" class="btn btn-primary">Tambah</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>
-    </div>
-
-<div
-    class="modal fade"
-    id="addModal"
-    tabindex="-1"
-    aria-labelledby="addModalLabel"
-    aria-hidden="true"
->
-    <div class="modal-dialog">
-        <form
-            method="post"
-            action="{% url 'add_wisata' %}"
-            enctype="multipart/form-data"
-        >
-            {% csrf_token %}
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="addModalLabel">
-                        Tambah Wisata
-                    </h1>
-                    <button
-                        type="button"
-                        class="btn-close"
-                        data-bs-dismiss="modal"
-                        aria-label="Close"
-                    ></button>
+        <div class="modal fade"
+             id="editModal"
+             tabindex="-1"
+             aria-labelledby="editModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog">
+                <form id="form-edit" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="editModalLabel">Edit Wisata</h1>
+                            <button type="button"
+                                    class="btn-close"
+                                    data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="nama-edit" class="form-label">Nama Wisata</label>
+                                <input type="text"
+                                       class="form-control"
+                                       name="nama"
+                                       id="nama-edit"
+                                       placeholder="Buleleng" />
+                            </div>
+                            <div class="mb-3">
+                                <label for="lokasi-edit" class="form-label">Lokasi</label>
+                                <input type="text"
+                                       class="form-control"
+                                       name="lokasi"
+                                       id="lokasi-edit"
+                                       placeholder="jl. xxxxx" />
+                            </div>
+                            <div class="mb-3">
+                                <label for="emmet-edit" class="form-label">
+                                    Emmet Tag (Masukan lokasi ambil dari embed
+                                    google maps)
+                                </label>
+                                <input type="text"
+                                       class="form-control"
+                                       name="emmet_tag"
+                                       id="emmet-edit"
+                                       placeholder="jl. xxxxx" />
+                            </div>
+                            <div class="mb-3">
+                                <label for="deskripsi-edit" class="form-label">Deskripsi</label>
+                                <textarea class="form-control" id="deskripsi-edit" name="deskripsi" rows="3"></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="biaya" class="form-label">Biaya</label>
+                                <input required
+                                       type="text"
+                                       class="form-control"
+                                       name="biaya"
+                                       id="biaya"
+                                       pattern="[0-9]+"
+                                       placeholder="100xxx" />
+                            </div>
+                            <div class="mb-3">
+                                <label for="no_rek" class="form-label">No Rek</label>
+                                <input required
+                                       type="text"
+                                       class="form-control"
+                                       name="no_rek"
+                                       id="no_rek"
+                                       pattern="[0-9]+"
+                                       placeholder="100xxx" />
+                            </div>
+                            <div class="mb-3">
+                                <label for="bank" class="form-label">Bank</label>
+                                <input required
+                                       type="text"
+                                       class="form-control"
+                                       name="bank"
+                                       id="bank"
+                                       placeholder="Bank xxx" />
+                            </div>
+                            <select class="form-select"
+                                    aria-label="Default select example"
+                                    name="kategori"
+                                    id="kategori-edit">
+                                <option selected>Buka menu untuk memilih kategori</option>
+                                {% for kategori in kategori %}<option value="{{ kategori.id }}">{{ kategori.nama }}</option>{% endfor %}
+                            </select>
+                            <div class="mb-3">
+                                <label for="formFile" class="form-label">Perizinan</label>
+                                <input class="form-control"
+                                       type="file"
+                                       accept="image/png, image/gif, image/jpeg"
+                                       id="formFile"
+                                       name="perizinan" />
+                            </div>
+                            <div class="mb-3">
+                                <label for="formFile" class="form-label">Gambar Utama</label>
+                                <input class="form-control"
+                                       type="file"
+                                       accept="image/png, image/gif, image/jpeg"
+                                       name="gambar_utama"
+                                       id="formFile" />
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                            <button type="submit" class="btn btn-primary">Simpan</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="modal fade"
+             id="deskripsiModal"
+             tabindex="-1"
+             aria-labelledby="deskripsiModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="deskripsiModalLabel">Deskripsi Wisata</h1>
+                        <button type="button"
+                                class="btn-close"
+                                data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body" id="deskripsi-body" style="white-space: pre-wrap"></div>
                 </div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="exampleFormControlInput2" class="form-label"
-                            >Nama Wisata</label
-                        >
-                        <input
-                            required
-                            type="text"
-                            class="form-control"
-                            name="nama"
-                            id="exampleFormControlInput2"
-                            placeholder="Namexxx"
-                        />
+            </div>
+        </div>
+        <div class="modal fade modal-lg"
+             id="perizinanModal"
+             tabindex="-1"
+             aria-labelledby="perizinanModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="perizinanModalLabel">Perizinan Wisata</h1>
+                        <button type="button"
+                                class="btn-close"
+                                data-bs-dismiss="modal"
+                                aria-label="Close"></button>
                     </div>
-                    <div class="mb-3">
-                        <label for="exampleFormControlInput3" class="form-label"
-                            >Lokasi
-                        </label>
-                        <input
-                            required
-                            type="text"
-                            class="form-control"
-                            name="lokasi"
-                            id="exampleFormControlInput3"
-                            placeholder="Indonesia, xxx"
-                        />
+                    <div class="modal-body d-flex aligns-center justify-content-center"
+                         style="white-space: pre-wrap">
+                        <img src="" id="perizinan-body" alt="" style="width: 400px" />
                     </div>
-                    <div class="mb-3">
-                        <label for="emmet_tag" class="form-label"
-                            >Emmet Tag (Masukan lokasi ambil dari embed google
-                            maps)
-                        </label>
-                        <input
-                            required
-                            type="text"
-                            class="form-control"
-                            name="emmet_tag"
-                            id="emmet_tag"
-                            placeholder="Jl. Xxxxx"
-                        />
+                </div>
+            </div>
+        </div>
+        <div class="modal fade modal-lg"
+             id="gambarModal"
+             tabindex="-1"
+             aria-labelledby="gambarModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="gambarModalLabel">Gambar Wisata</h1>
+                        <button type="button"
+                                class="btn-close"
+                                data-bs-dismiss="modal"
+                                aria-label="Close"></button>
                     </div>
-                    <div class="mb-3">
-                        <label
-                            for="exampleFormControlTextarea1"
-                            class="form-label"
-                            >Deskripsi</label
-                        >
-                        <textarea
-                            required
-                            class="form-control"
-                            id="exampleFormControlTextarea1"
-                            name="deskripsi"
-                            rows="3"
-                        ></textarea>
+                    <div class="modal-body d-flex aligns-center justify-content-center"
+                         style="white-space: pre-wrap">
+                        <img src="" id="gambar-body" alt="" style="width: 400px" />
                     </div>
-                    <select
-                        class="form-select"
-                        aria-label="Default select example"
-                        name="kategori"
-                    >
-                        <option selected>
-                            Buka menu untuk memilih kategori
-                        </option>
-                        {% for kategori in kategori %}
-                        <option value="{{ kategori.id }}">
-                            {{ kategori.nama }}
-                        </option>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade modal-lg"
+             id="gambarLainModal"
+             tabindex="-1"
+             aria-labelledby="gambarLainModalLabel"
+             aria-hidden="true">
+            <form id="add-photo"
+                  class="modal-dialog"
+                  action="{% url 'add_photo' %}"
+                  method="post"
+                  enctype="multipart/form-data">
+                <div class="modal-content">
+                    {% csrf_token %}
+                    <input type="hidden" name="id" id="add-id" />
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="gambarLainModalLabel">Gambar Tambahan</h1>
+                        <button type="button"
+                                class="btn-close"
+                                data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body d-flex"
+                         style="white-space: pre-wrap;
+                                flex-direction: column">
+                        <p class="w-100">Maksimal 4 gambar per wisata</p>
+                        <input class="form-control mt-2"
+                               type="file"
+                               accept="image/png, image/gif, image/jpeg"
+                               name="gambar_tambahan"
+                               id="formFile"
+                               multiple
+                               max="4" />
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-primary">Simpan</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal fade"
+             id="deleteModal"
+             tabindex="-1"
+             aria-labelledby="deleteModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="deleteModalLabel">Hapus Kategori</h1>
+                        <button type="button"
+                                class="btn-close"
+                                data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">Apakah yakin untuk menghapus kategori?</div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                        <a type="button" class="btn btn-danger" id="delete-url">Hapus</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade"
+             id="travelModal"
+             tabindex="-1"
+             aria-labelledby="travelModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog">
+                <form class="modal-content"
+                      method="post"
+                      action="{% url 'add_agency_wisata' %}">
+                    <input type="hidden" id="travel-wisata-id" name="wisata_id" />
+                    {% csrf_token %}
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="travelModalLabel">Tambah Agency Wisata</h1>
+                        <button type="button"
+                                class="btn-close"
+                                data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        {% for agency in agencies %}
+                            <div class="form-check form-switch mb-2">
+                                <input class="form-check-input"
+                                       type="checkbox"
+                                       role="switch"
+                                       id="flexSwitchCheckDefault-{{ agency.id }}"
+                                       name="agencies[]"
+                                       value="{{ agency.id }}" />
+                                <label class="form-check-label ms-3"
+                                       for="flexSwitchCheckDefault-{{ agency.id }}">{{ agency.nama }}</label>
+                            </div>
                         {% endfor %}
-                    </select>
-                    <div class="mb-3">
-                        <label for="formFile" class="form-label"
-                            >Perizinan</label
-                        >
-                        <input
-                            required
-                            class="form-control"
-                            type="file"
-                            accept="image/png, image/gif, image/jpeg"
-                            id="formFile"
-                            name="perizinan"
-                        />
                     </div>
-                    <div class="mb-3">
-                        <label for="formFile" class="form-label"
-                            >Gambar Utama</label
-                        >
-                        <input
-                            required
-                            class="form-control"
-                            type="file"
-                            accept="image/png, image/gif, image/jpeg"
-                            id="formFile"
-                            name="gambar_utama"
-                        />
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-primary" id="delete-url">Simpan</button>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button
-                        type="button"
-                        class="btn btn-secondary"
-                        data-bs-dismiss="modal"
-                    >
-                        Batal
-                    </button>
-                    <button type="submit" class="btn btn-primary">
-                        Tambah
-                    </button>
-                </div>
-            </div>
-        </form>
-    </div>
-</div>
-
-<div
-    class="modal fade"
-    id="editModal"
-    tabindex="-1"
-    aria-labelledby="editModalLabel"
-    aria-hidden="true"
->
-    <div class="modal-dialog">
-        <form id="form-edit" method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="editModalLabel">
-                        Edit Wisata
-                    </h1>
-                    <button
-                        type="button"
-                        class="btn-close"
-                        data-bs-dismiss="modal"
-                        aria-label="Close"
-                    ></button>
-                </div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="nama-edit" class="form-label"
-                            >Nama Wisata</label
-                        >
-                        <input
-                            type="text"
-                            class="form-control"
-                            name="nama"
-                            id="nama-edit"
-                            placeholder="Buleleng"
-                        />
-                    </div>
-                    <div class="mb-3">
-                        <label for="lokasi-edit" class="form-label"
-                            >Lokasi
-                        </label>
-                        <input
-                            type="text"
-                            class="form-control"
-                            name="lokasi"
-                            id="lokasi-edit"
-                            placeholder="jl. xxxxx"
-                        />
-                    </div>
-                    <div class="mb-3">
-                        <label for="emmet-edit" class="form-label"
-                            >Emmet Tag (Masukan lokasi ambil dari embed google
-                            maps)</label
-                        >
-                        <input
-                            type="text"
-                            class="form-control"
-                            name="emmet_tag"
-                            id="emmet-edit"
-                            placeholder="jl. xxxxx"
-                        />
-                    </div>
-                    <div class="mb-3">
-                        <label for="deskripsi-edit" class="form-label"
-                            >Deskripsi</label
-                        >
-                        <textarea
-                            class="form-control"
-                            id="deskripsi-edit"
-                            name="deskripsi"
-                            rows="3"
-                        ></textarea>
-                    </div>
-                    <select
-                        class="form-select"
-                        aria-label="Default select example"
-                        name="kategori"
-                        id="kategori-edit"
-                    >
-                        <option selected>
-                            Buka menu untuk memilih kategori
-                        </option>
-                        {% for kategori in kategori %}
-                        <option value="{{ kategori.id }}">
-                            {{ kategori.nama }}
-                        </option>
-                        {% endfor %}
-                    </select>
-                    <div class="mb-3">
-                        <label for="formFile" class="form-label"
-                            >Perizinan</label
-                        >
-                        <input
-                            class="form-control"
-                            type="file"
-                            accept="image/png, image/gif, image/jpeg"
-                            id="formFile"
-                            name="perizinan"
-                        />
-                    </div>
-                    <div class="mb-3">
-                        <label for="formFile" class="form-label"
-                            >Gambar Utama</label
-                        >
-                        <input
-                            class="form-control"
-                            type="file"
-                            accept="image/png, image/gif, image/jpeg"
-                            name="gambar_utama"
-                            id="formFile"
-                        />
-                    </div>
-                </div>
-
-                <div class="modal-footer">
-                    <button
-                        type="button"
-                        class="btn btn-secondary"
-                        data-bs-dismiss="modal"
-                    >
-                        Batal
-                    </button>
-                    <button type="submit" class="btn btn-primary">
-                        Simpan
-                    </button>
-                </div>
-            </div>
-        </form>
-    </div>
-</div>
-
-<div
-    class="modal fade"
-    id="deskripsiModal"
-    tabindex="-1"
-    aria-labelledby="deskripsiModalLabel"
-    aria-hidden="true"
->
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="deskripsiModalLabel">
-                    Deskripsi Wisata
-                </h1>
-                <button
-                    type="button"
-                    class="btn-close"
-                    data-bs-dismiss="modal"
-                    aria-label="Close"
-                ></button>
-            </div>
-            <div
-                class="modal-body"
-                id="deskripsi-body"
-                style="white-space: pre-wrap"
-            ></div>
-        </div>
-    </div>
-</div>
-
-<div
-    class="modal fade modal-lg"
-    id="perizinanModal"
-    tabindex="-1"
-    aria-labelledby="perizinanModalLabel"
-    aria-hidden="true"
->
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="perizinanModalLabel">
-                    Perizinan Wisata
-                </h1>
-                <button
-                    type="button"
-                    class="btn-close"
-                    data-bs-dismiss="modal"
-                    aria-label="Close"
-                ></button>
-            </div>
-            <div
-                class="modal-body d-flex aligns-center justify-content-center"
-                style="white-space: pre-wrap"
-            >
-                <img src="" id="perizinan-body" alt="" style="width: 400px" />
+                </form>
             </div>
         </div>
     </div>
-</div>
-
-<div
-    class="modal fade modal-lg"
-    id="gambarModal"
-    tabindex="-1"
-    aria-labelledby="gambarModalLabel"
-    aria-hidden="true"
->
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="gambarModalLabel">
-                    Gambar Wisata
-                </h1>
-                <button
-                    type="button"
-                    class="btn-close"
-                    data-bs-dismiss="modal"
-                    aria-label="Close"
-                ></button>
-            </div>
-            <div
-                class="modal-body d-flex aligns-center justify-content-center"
-                style="white-space: pre-wrap"
-            >
-                <img src="" id="gambar-body" alt="" style="width: 400px" />
-            </div>
-        </div>
-    </div>
-</div>
-
-<div
-    class="modal fade modal-lg"
-    id="gambarLainModal"
-    tabindex="-1"
-    aria-labelledby="gambarLainModalLabel"
-    aria-hidden="true"
->
-    <form
-        id="add-photo"
-        class="modal-dialog"
-        action="{% url 'add_photo' %}"
-        method="post"
-        enctype="multipart/form-data"
-    >
-        <div class="modal-content">
-            {% csrf_token %}
-            <input type="hidden" name="id" id="add-id" />
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="gambarLainModalLabel">
-                    Gambar Tambahan
-                </h1>
-                <button
-                    type="button"
-                    class="btn-close"
-                    data-bs-dismiss="modal"
-                    aria-label="Close"
-                ></button>
-            </div>
-            <div
-                class="modal-body d-flex"
-                style="white-space: pre-wrap; flex-direction: column"
-            >
-                <p class="w-100">Maksimal 4 gambar per wisata</p>
-                <input
-                    class="form-control mt-2"
-                    type="file"
-                    accept="image/png, image/gif, image/jpeg"
-                    name="gambar_tambahan"
-                    id="formFile"
-                    multiple
-                    max="4"
-                />
-            </div>
-            <div class="modal-footer">
-                <button
-                    type="button"
-                    class="btn btn-secondary"
-                    data-bs-dismiss="modal"
-                >
-                    Batal
-                </button>
-                <button type="submit" class="btn btn-primary">Simpan</button>
-            </div>
-        </div>
-    </form>
-</div>
-
-<div
-    class="modal fade"
-    id="deleteModal"
-    tabindex="-1"
-    aria-labelledby="deleteModalLabel"
-    aria-hidden="true"
-  >
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="deleteModalLabel">Hapus Kategori</h1>
-                <button
-                type="button"
-                class="btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-                ></button>
-            </div>
-            <div class="modal-body">Apakah yakin untuk menghapus kategori?</div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                Batal
-                </button>
-                <a type="button" class="btn btn-danger" id="delete-url">Hapus</a>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div
-    class="modal fade"
-    id="travelModal"
-    tabindex="-1"
-    aria-labelledby="travelModalLabel"
-    aria-hidden="true"
-  >
-    <div class="modal-dialog">
-        <form class="modal-content" method="post" action="{% url 'add_agency_wisata' %}">
-            <input type="hidden" id="travel-wisata-id" name="wisata_id">
-            {% csrf_token %}
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="travelModalLabel">Tambah Agency Wisata</h1>
-                <button
-                type="button"
-                class="btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-                ></button>
-            </div>
-            <div class="modal-body">
-                {% for agency in agencies %}
-                <div class="form-check form-switch mb-2">
-                    <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault-{{agency.id}}" name="agencies[]" value="{{agency.id}}">
-                    <label class="form-check-label ms-3" for="flexSwitchCheckDefault-{{agency.id}}">{{agency.nama}}</label>
-                </div>
-                {% endfor %}
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                Batal
-                </button>
-                <button type="submit" class="btn btn-primary" id="delete-url">Simpan</>
-            </div>
-        </form>
-    </div>
-</div>
-    
-</div>
-    {% endblock content %} {% block javascript %}
+{% endblock content %}
+{% block javascript %}
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            var addPhotoButtons = document.querySelectorAll(
-                "[name='button-gambar-lain']"
-            );
-            addPhotoButtons.forEach((button) => {
-                button.addEventListener('click', function () {
-                    var id = button.getAttribute('data-add');
-                    document
-                        .getElementById('add-photo')
-                        .getElementsByTagName('input')[1].value = id;
-                });
-            });
-
-            var editButtons = document.querySelectorAll("[name='edit-button']");
-            editButtons.forEach((button) => {
-                button.addEventListener('click', function () {
-                    var form = document
-                        .getElementById('form-edit')
-                        .getElementsByTagName('input');
-                    var area = document
-                        .getElementById('form-edit')
-                        .getElementsByTagName('textarea');
-                    var select = document
-                        .getElementById('form-edit')
-                        .getElementsByTagName('select');
-                    document
-                        .getElementById('form-edit')
-                        .setAttribute(
-                            'action',
-                            '/wisata/edit/' + this.getAttribute('data-edit')
-                        );
-                    xhr = new XMLHttpRequest();
-                    xhr.open(
-                        'GET',
-                        '/wisata/detail/' + this.getAttribute('data-edit'),
-                        true
-                    );
-                    xhr.send();
-                    xhr.onload = (e) => {
-                        data = JSON.parse(xhr.response);
-                        form['nama-edit'].value = data.nama;
-                        form['lokasi-edit'].value = data.alamat;
-                        form['emmet-edit'].value = data.emmet_tag;
-                        area['deskripsi-edit'].value = data.deskripsi;
-                        for (let i = 0; i < select[0].options.length; i++) {
-                            if (select[0].options[i].value == data.kategori) {
-                                select[0].options[i].selected = true;
-                            }
-                        }
-                    };
-                });
-            });
-
-            var travelButtons = document.querySelectorAll(
-                "[name='travel-button']"
-            )
-            let myValue = JSON.parse('{{ x|escapejs }}')
-
-            travelButtons.forEach((button)=>{
-                button.addEventListener('click', function(){
-                    var x = document.querySelectorAll("[name='agencies[]']")
-                    document.getElementById("travel-wisata-id").setAttribute('value', this.getAttribute('data-wisata'))
-                    xhr = new XMLHttpRequest();
-
-                    xhr.open(
-                        "GET",
-                        "/wisata/agency/" + this.getAttribute('data-wisata'),
-                        true
-                    )
-                    xhr.send();
-                    xhr.onload = e =>{
-                        data = JSON.parse(JSON.parse(xhr.response));
-                        myValue.forEach((res)=>{
-                            var xValue = data.map((x)=>{
-                                if (x.fields.agency == res.pk){
-                                    return x.fields.agency
-                                }
-                            }).filter(function( element ) {
-                                return element !== undefined;
-                             })
-                             data.forEach((y)=>{
-                                x.forEach((check)=>{
-                                    if (y.fields.agency == xValue && check.value == xValue){
-                                        check.checked = true;
-                                    }
-                                })
-                             })
-                        })
-                    }
-                })
-            })
-
-            var deleteButtons = document.querySelectorAll(
-                "[name='delete-button']"
-            );
-
-            deleteButtons.forEach((button) => {
-                button.addEventListener('click', function () {
-                    document
-                        .getElementById('delete-url')
-                        .setAttribute(
-                            'href',
-                            '/wisata/delete/' + this.getAttribute('data-delete')
-                        );
-                });
-            });
-
-            const perizinanButton = document.querySelectorAll(
-                "[name='button-perizinan']"
-            );
-
-            perizinanButton.forEach((button) => {
-                button.addEventListener('click', function () {
-                    const perizinan = this.getAttribute('data-perizinan');
-
-                    document
-                        .getElementById('perizinan-body')
-                        .setAttribute('src', perizinan);
-                });
-            });
-
-            const deskripsiButton = document.querySelectorAll(
-                "[name='button-deskripsi']"
-            );
-            deskripsiButton.forEach((button) => {
-                button.addEventListener('click', function () {
-                    const deskripsi = this.getAttribute('data-deskripsi');
-                    document.getElementById('deskripsi-body').textContent =
-                        deskripsi;
-                });
-            });
-
-            const gambarButtons = document.querySelectorAll(
-                "[name='button-gambar']"
-            );
-            gambarButtons.forEach((button) => {
-                button.addEventListener('click', function () {
-                    const gambar = this.getAttribute('data-gambar');
-
-                    document
-                        .getElementById('gambar-body')
-                        .setAttribute('src', gambar);
-                });
+    document.addEventListener('DOMContentLoaded', function () {
+        var addPhotoButtons = document.querySelectorAll(
+            "[name='button-gambar-lain']"
+        );
+        addPhotoButtons.forEach((button) => {
+            button.addEventListener('click', function () {
+                var id = button.getAttribute('data-add');
+                document
+                    .getElementById('add-photo')
+                    .getElementsByTagName('input')[1].value = id;
             });
         });
+
+        var editButtons = document.querySelectorAll("[name='edit-button']");
+        editButtons.forEach((button) => {
+            button.addEventListener('click', function () {
+                var form = document
+                    .getElementById('form-edit')
+                    .getElementsByTagName('input');
+                var area = document
+                    .getElementById('form-edit')
+                    .getElementsByTagName('textarea');
+                var select = document
+                    .getElementById('form-edit')
+                    .getElementsByTagName('select');
+                document
+                    .getElementById('form-edit')
+                    .setAttribute(
+                        'action',
+                        '/wisata/edit/' + this.getAttribute('data-edit')
+                    );
+                xhr = new XMLHttpRequest();
+                xhr.open(
+                    'GET',
+                    '/wisata/detail/' + this.getAttribute('data-edit'),
+                    true
+                );
+                xhr.send();
+                xhr.onload = (e) => {
+                    data = JSON.parse(xhr.response);
+                    form['nama-edit'].value = data.nama;
+                    form['lokasi-edit'].value = data.alamat;
+                    form['emmet-edit'].value = data.emmet_tag;
+                    form['biaya'].value = data.biaya;
+                    form['no_rek'].value = data.no_rek;
+                    form['bank'].value = data.bank;
+                    area['deskripsi-edit'].value = data.deskripsi;
+                    for (let i = 0; i < select[0].options.length; i++) {
+                        if (select[0].options[i].value == data.kategori) {
+                            select[0].options[i].selected = true;
+                        }
+                    }
+                };
+            });
+        });
+
+        var travelButtons = document.querySelectorAll("[name='travel-button']");
+        let myValue = JSON.parse('{{ x|escapejs }}');
+
+        travelButtons.forEach((button) => {
+            button.addEventListener('click', function () {
+                var x = document.querySelectorAll("[name='agencies[]']");
+                document
+                    .getElementById('travel-wisata-id')
+                    .setAttribute('value', this.getAttribute('data-wisata'));
+                xhr = new XMLHttpRequest();
+
+                xhr.open(
+                    'GET',
+                    '/wisata/agency/' + this.getAttribute('data-wisata'),
+                    true
+                );
+                xhr.send();
+                xhr.onload = (e) => {
+                    data = JSON.parse(JSON.parse(xhr.response));
+                    myValue.forEach((res) => {
+                        var xValue = data
+                            .map((x) => {
+                                if (x.fields.agency == res.pk) {
+                                    return x.fields.agency;
+                                }
+                            })
+                            .filter(function (element) {
+                                return element !== undefined;
+                            });
+                        data.forEach((y) => {
+                            x.forEach((check) => {
+                                if (
+                                    y.fields.agency == xValue &&
+                                    check.value == xValue
+                                ) {
+                                    check.checked = true;
+                                }
+                            });
+                        });
+                    });
+                };
+            });
+        });
+
+        var deleteButtons = document.querySelectorAll("[name='delete-button']");
+
+        deleteButtons.forEach((button) => {
+            button.addEventListener('click', function () {
+                document
+                    .getElementById('delete-url')
+                    .setAttribute(
+                        'href',
+                        '/wisata/delete/' + this.getAttribute('data-delete')
+                    );
+            });
+        });
+
+        const perizinanButton = document.querySelectorAll(
+            "[name='button-perizinan']"
+        );
+
+        perizinanButton.forEach((button) => {
+            button.addEventListener('click', function () {
+                const perizinan = this.getAttribute('data-perizinan');
+
+                document
+                    .getElementById('perizinan-body')
+                    .setAttribute('src', perizinan);
+            });
+        });
+
+        const deskripsiButton = document.querySelectorAll(
+            "[name='button-deskripsi']"
+        );
+        deskripsiButton.forEach((button) => {
+            button.addEventListener('click', function () {
+                const deskripsi = this.getAttribute('data-deskripsi');
+                document.getElementById('deskripsi-body').textContent =
+                    deskripsi;
+            });
+        });
+
+        const gambarButtons = document.querySelectorAll(
+            "[name='button-gambar']"
+        );
+        gambarButtons.forEach((button) => {
+            button.addEventListener('click', function () {
+                const gambar = this.getAttribute('data-gambar');
+
+                document
+                    .getElementById('gambar-body')
+                    .setAttribute('src', gambar);
+            });
+        });
+    });
     </script>
-    {% endblock javascript %}
+{% endblock javascript %}

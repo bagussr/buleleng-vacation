@@ -1,0 +1,47 @@
+{% extends "dashboard/layout.html" %}
+<!--  -->
+{% block title %} Dashboard | Kritik {% endblock %}
+<!--  -->
+{% block content %}
+<div class="container">
+    <div class="row">
+        <h1>Kritik dan Saran Website</h1>
+    </div>
+    <div class="container p-4" style="background-color: white">
+        <div class="row mt-3" style="overflow: auto">
+            <table class="table table-light">
+                <thead class="border text-center" style="font-weight: 600">
+                    <tr>
+                        <th scope="col" style="width: 60px">No</th>
+                        <th scope="col" style="width: 120px !important">
+                            User
+                        </th>
+                        <th scope="col" style="width: 360px">Text</th>
+                        <th scope="col" style="width: 80px">Tanggal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in kritik %}
+                    <tr class="text-center">
+                        <th scope="row" class="text-center">
+                            {{forloop.counter}}
+                        </th>
+                        <td style="width: 120px !important">
+                            {{item.user.first_name}} {{item.user.last_name}}
+                        </td>
+                        <td class="text-center" style="width: 360px">
+                            {{item.text}}
+                        </td>
+                        <td style="width: 80px">
+                            {{item.created_at|date:'Y M d'}}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+<!--  -->

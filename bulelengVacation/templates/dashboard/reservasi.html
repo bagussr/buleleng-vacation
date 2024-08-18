@@ -1,6 +1,6 @@
 {% extends "dashboard/layout.html" %}
 <!--  -->
-{% block title %} Dashboard | Feedback Wisata {% endblock %}
+{% block title %} Dashboard | Reservasi Wisata {% endblock %}
 <!--  -->
 {% block content %}
 <div class="container">
@@ -14,14 +14,16 @@
                     <tr>
                         <th scope="col" style="width: 60px">No</th>
                         <th scope="col">Wisata</th>
-                        <th scope="col">Text</th>
-                        <th scope="col">Rating</th>
+                        <th scope="col">Atas Nama</th>
+                        <th scope="col">Jumlah</th>
+                        <th scope="col">No Wa</th>
                         <th scope="col">Tanggal</th>
                         <th scope="col">User</th>
+                        <th scope="col">Bukti Transfer</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for item in feedback %}
+                    {% for item in reservasi %}
                     <tr class="text-center">
                         <th scope="row" class="text-center">
                             {{forloop.counter}}
@@ -33,11 +35,20 @@
                                 alt=""
                             />
                         </td>
-                        <td>{{item.text}}</td>
-                        <td class="text-center">{{item.rating}}</td>
-                        <td>{{item.tanggal|date:'Y M d'}}</td>
-
-                        <td>{{item.user}}</td>
+                        <td class="text-center">{{item.nama}}</td>
+                        <td>{{item.jumlah}}</td>
+                        <td class="text-center">{{item.no_wa}}</td>
+                        <td>{{item.hari|date:'Y M d'}}</td>
+                        <td>{{item.user.first_name}}</td>
+                        <td>
+                            {% if item.pembayaran %}
+                            <img
+                                width="200"
+                                src="{{item.pembayaran.url}}"
+                                alt=""
+                            />
+                            {% endif %}
+                        </td>
                     </tr>
                     {% endfor %}
                 </tbody>
