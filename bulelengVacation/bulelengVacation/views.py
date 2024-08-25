@@ -27,7 +27,8 @@ def index(request):
     wisata = Wisata.objects.exclude(pilihan=False).order_by("-id").all()
     best = Wisata.objects.first()
     kategori = Kategori.objects.all()
-    agency = TravelAgency.objects.order_by("-id").all()
+    akomodasi = TravelAgency.objects.order_by("-id").filter(is_hotel=False).all()
+    hotel = TravelAgency.objects.order_by("-id").filter(is_hotel=True).all()
     artikel = Article.objects.order_by("-id").all()
     information = Information.objects.all()
     wisatas = []
@@ -41,7 +42,8 @@ def index(request):
             "wisata": wisatas[:3],
             "best": best,
             "kategori": kategori,
-            "agency": agency[:3],
+            "akomodasi": akomodasi[:3],
+            "hotel": hotel[:3],
             "artikel": artikel,
             "information": information,
         },
@@ -100,9 +102,15 @@ def wisata(request):
 
 
 def agensi(request):
-    agency = TravelAgency.objects.all()
+    agency = TravelAgency.objects.exclude(is_hotel=True).all()
 
     return render(request, "agency.html", {"agensi": agency})
+
+
+def hotel(request):
+    agency = TravelAgency.objects.exclude(is_hotel=False).all()
+
+    return render(request, "hotel.html", {"agensi": agency})
 
 
 def detail_agensi(request, nama):

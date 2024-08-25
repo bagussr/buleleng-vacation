@@ -1,7 +1,8 @@
 {% extends "layout.html" %}
 <!--  -->
 {% block title %}Wisata | {{wisata.nama}}{% endblock title %}
-
+<!--  -->
+{% load humanize %}
 <!--  -->
 {% block content %}
 <main class="mt-5" style="padding: 0 3rem">
@@ -49,41 +50,44 @@
                 <h1>{{wisata.nama}}</h1>
                 <div class="d-flex mt-3" style="gap: 3rem">
                     <span class="d-flex justify-content-between">
+                        {% if wisata.show_rating == 0 %}
+                            
                         <p
-                            class="d-flex align-items-center"
-                            style="width: 40px; gap: 10px"
+                        class="d-flex align-items-center"
+                        style="width: 40px; gap: 10px"
                         >
                             {{wisata.rating}}
                             <svg
-                                version="1.0"
-                                id="Layer_1"
-                                xmlns="http://www.w3.org/2000/svg"
-                                xmlns:xlink="http://www.w3.org/1999/xlink"
-                                viewBox="0 0 64 64"
-                                enable-background="new 0 0 64 64"
-                                xml:space="preserve"
-                                fill="#000000"
+                            version="1.0"
+                            id="Layer_1"
+                            xmlns="http://www.w3.org/2000/svg"
+                            xmlns:xlink="http://www.w3.org/1999/xlink"
+                            viewBox="0 0 64 64"
+                            enable-background="new 0 0 64 64"
+                            xml:space="preserve"
+                            fill="#000000"
                             >
-                                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                                <g
-                                    id="SVGRepo_tracerCarrier"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                ></g>
-                                <g id="SVGRepo_iconCarrier">
+                            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                            <g
+                            id="SVGRepo_tracerCarrier"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            ></g>
+                            <g id="SVGRepo_iconCarrier">
                                     <g>
                                         <path
-                                            fill="#F9EBB2"
-                                            d="M31.998,2.478c0.279,0,0.463,0.509,0.463,0.509l8.806,18.759l20.729,3.167l-14.999,15.38l3.541,21.701 l-18.54-10.254l-18.54,10.254l3.541-21.701L2,24.912l20.729-3.167l8.798-18.743C31.527,3.002,31.719,2.478,31.998,2.478 M31.998,0 c-0.775,0-1.48,0.448-1.811,1.15l-8.815,18.778L1.698,22.935c-0.741,0.113-1.356,0.632-1.595,1.343 c-0.238,0.71-0.059,1.494,0.465,2.031l14.294,14.657L11.484,61.67c-0.124,0.756,0.195,1.517,0.822,1.957 c0.344,0.243,0.747,0.366,1.151,0.366c0.332,0,0.666-0.084,0.968-0.25l17.572-9.719l17.572,9.719 c0.302,0.166,0.636,0.25,0.968,0.25c0.404,0,0.808-0.123,1.151-0.366c0.627-0.44,0.946-1.201,0.822-1.957l-3.378-20.704 l14.294-14.657c0.523-0.537,0.703-1.321,0.465-2.031c-0.238-0.711-0.854-1.229-1.595-1.343l-19.674-3.006L33.809,1.15 C33.479,0.448,32.773,0,31.998,0L31.998,0z"
+                                        fill="#F9EBB2"
+                                        d="M31.998,2.478c0.279,0,0.463,0.509,0.463,0.509l8.806,18.759l20.729,3.167l-14.999,15.38l3.541,21.701 l-18.54-10.254l-18.54,10.254l3.541-21.701L2,24.912l20.729-3.167l8.798-18.743C31.527,3.002,31.719,2.478,31.998,2.478 M31.998,0 c-0.775,0-1.48,0.448-1.811,1.15l-8.815,18.778L1.698,22.935c-0.741,0.113-1.356,0.632-1.595,1.343 c-0.238,0.71-0.059,1.494,0.465,2.031l14.294,14.657L11.484,61.67c-0.124,0.756,0.195,1.517,0.822,1.957 c0.344,0.243,0.747,0.366,1.151,0.366c0.332,0,0.666-0.084,0.968-0.25l17.572-9.719l17.572,9.719 c0.302,0.166,0.636,0.25,0.968,0.25c0.404,0,0.808-0.123,1.151-0.366c0.627-0.44,0.946-1.201,0.822-1.957l-3.378-20.704 l14.294-14.657c0.523-0.537,0.703-1.321,0.465-2.031c-0.238-0.711-0.854-1.229-1.595-1.343l-19.674-3.006L33.809,1.15 C33.479,0.448,32.773,0,31.998,0L31.998,0z"
                                         ></path>
                                         <path
-                                            fill="#F9EBB2"
-                                            d="M31.998,2.478c0.279,0,0.463,0.509,0.463,0.509l8.806,18.759l20.729,3.167l-14.999,15.38l3.541,21.701 l-18.54-10.254l-18.54,10.254l3.541-21.701L2,24.912l20.729-3.167l8.798-18.743C31.527,3.002,31.719,2.478,31.998,2.478"
+                                        fill="#F9EBB2"
+                                        d="M31.998,2.478c0.279,0,0.463,0.509,0.463,0.509l8.806,18.759l20.729,3.167l-14.999,15.38l3.541,21.701 l-18.54-10.254l-18.54,10.254l3.541-21.701L2,24.912l20.729-3.167l8.798-18.743C31.527,3.002,31.719,2.478,31.998,2.478"
                                         ></path>
                                     </g>
                                 </g>
                             </svg>
                         </p>
+                        {% endif %}
                     </span>
                     <div class="d-flex" style="flex-direction: column">
                         <p style="font-weight: 400; font-size: medium">
@@ -139,14 +143,9 @@
                     {% for item in agency %}
 
                     <a
-                        {%
-                        if
-                        item.website
-                        %}
+                        {% if item.website %}
                         href="{{item.website}}"
-                        {%
-                        endif
-                        %}
+                        {% endif %}
                     >
                         <img
                             class="rounded-circle"
@@ -163,6 +162,9 @@
         </div>
         <div class="row mt-5">
             <button
+                {% if wisata.sisa == 0 %}
+                disabled
+                {% endif %}
                 class="btn btn-primary"
                 style="width: 200px"
                 id="add-button"
@@ -171,6 +173,9 @@
                 data-bs-target="#addModal"
             >
                 Beli Tiket
+                {% if wisata.sisa == 0 %}
+                (habis)
+                {% endif %}
             </button>
         </div>
         <div class="row mt-5">
@@ -186,6 +191,7 @@
             <div class="col mt-5">
                 <h2 style="color: #31503e">Feedback</h2>
                 {% for item in feedback %}
+                {% if item.hide == 0 %}
                 <div class="d-flex" style="flex-direction: column">
                     <div
                         class="d-flex"
@@ -214,6 +220,8 @@
                                 class="d-flex"
                                 style="width: 500px; align-self: start"
                             >
+                                {% if wisata.show_rating == 0 %}
+                                <!--  -->
                                 {% for rate in item.range %}
                                 <span style="width: 24px">
                                     <svg
@@ -249,13 +257,14 @@
                                         </g>
                                     </svg>
                                 </span>
-                                {% endfor %}
+                                {% endfor %} {% endif %}
                             </div>
                         </span>
                         <p>{{item.text}}</p>
                     </div>
                 </div>
                 <hr />
+                {% endif %}
                 {% endfor %}
             </div>
             {% endif %}
@@ -356,41 +365,44 @@
                 <h1>{{wisata.nama}}</h1>
                 <div class="d-flex mt-3" style="gap: 3rem">
                     <span class="d-flex justify-content-between">
+                        {% if wisata.show_rating == 0 %}
+                            
                         <p
-                            class="d-flex align-items-center"
-                            style="width: 40px; gap: 10px"
+                        class="d-flex align-items-center"
+                        style="width: 40px; gap: 10px"
                         >
                             {{wisata.rating}}
                             <svg
-                                version="1.0"
-                                id="Layer_1"
-                                xmlns="http://www.w3.org/2000/svg"
-                                xmlns:xlink="http://www.w3.org/1999/xlink"
-                                viewBox="0 0 64 64"
-                                enable-background="new 0 0 64 64"
-                                xml:space="preserve"
-                                fill="#000000"
+                            version="1.0"
+                            id="Layer_1"
+                            xmlns="http://www.w3.org/2000/svg"
+                            xmlns:xlink="http://www.w3.org/1999/xlink"
+                            viewBox="0 0 64 64"
+                            enable-background="new 0 0 64 64"
+                            xml:space="preserve"
+                            fill="#000000"
                             >
-                                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                                <g
-                                    id="SVGRepo_tracerCarrier"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                ></g>
-                                <g id="SVGRepo_iconCarrier">
+                            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                            <g
+                            id="SVGRepo_tracerCarrier"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            ></g>
+                            <g id="SVGRepo_iconCarrier">
                                     <g>
                                         <path
-                                            fill="#F9EBB2"
-                                            d="M31.998,2.478c0.279,0,0.463,0.509,0.463,0.509l8.806,18.759l20.729,3.167l-14.999,15.38l3.541,21.701 l-18.54-10.254l-18.54,10.254l3.541-21.701L2,24.912l20.729-3.167l8.798-18.743C31.527,3.002,31.719,2.478,31.998,2.478 M31.998,0 c-0.775,0-1.48,0.448-1.811,1.15l-8.815,18.778L1.698,22.935c-0.741,0.113-1.356,0.632-1.595,1.343 c-0.238,0.71-0.059,1.494,0.465,2.031l14.294,14.657L11.484,61.67c-0.124,0.756,0.195,1.517,0.822,1.957 c0.344,0.243,0.747,0.366,1.151,0.366c0.332,0,0.666-0.084,0.968-0.25l17.572-9.719l17.572,9.719 c0.302,0.166,0.636,0.25,0.968,0.25c0.404,0,0.808-0.123,1.151-0.366c0.627-0.44,0.946-1.201,0.822-1.957l-3.378-20.704 l14.294-14.657c0.523-0.537,0.703-1.321,0.465-2.031c-0.238-0.711-0.854-1.229-1.595-1.343l-19.674-3.006L33.809,1.15 C33.479,0.448,32.773,0,31.998,0L31.998,0z"
+                                        fill="#F9EBB2"
+                                        d="M31.998,2.478c0.279,0,0.463,0.509,0.463,0.509l8.806,18.759l20.729,3.167l-14.999,15.38l3.541,21.701 l-18.54-10.254l-18.54,10.254l3.541-21.701L2,24.912l20.729-3.167l8.798-18.743C31.527,3.002,31.719,2.478,31.998,2.478 M31.998,0 c-0.775,0-1.48,0.448-1.811,1.15l-8.815,18.778L1.698,22.935c-0.741,0.113-1.356,0.632-1.595,1.343 c-0.238,0.71-0.059,1.494,0.465,2.031l14.294,14.657L11.484,61.67c-0.124,0.756,0.195,1.517,0.822,1.957 c0.344,0.243,0.747,0.366,1.151,0.366c0.332,0,0.666-0.084,0.968-0.25l17.572-9.719l17.572,9.719 c0.302,0.166,0.636,0.25,0.968,0.25c0.404,0,0.808-0.123,1.151-0.366c0.627-0.44,0.946-1.201,0.822-1.957l-3.378-20.704 l14.294-14.657c0.523-0.537,0.703-1.321,0.465-2.031c-0.238-0.711-0.854-1.229-1.595-1.343l-19.674-3.006L33.809,1.15 C33.479,0.448,32.773,0,31.998,0L31.998,0z"
                                         ></path>
                                         <path
-                                            fill="#F9EBB2"
-                                            d="M31.998,2.478c0.279,0,0.463,0.509,0.463,0.509l8.806,18.759l20.729,3.167l-14.999,15.38l3.541,21.701 l-18.54-10.254l-18.54,10.254l3.541-21.701L2,24.912l20.729-3.167l8.798-18.743C31.527,3.002,31.719,2.478,31.998,2.478"
+                                        fill="#F9EBB2"
+                                        d="M31.998,2.478c0.279,0,0.463,0.509,0.463,0.509l8.806,18.759l20.729,3.167l-14.999,15.38l3.541,21.701 l-18.54-10.254l-18.54,10.254l3.541-21.701L2,24.912l20.729-3.167l8.798-18.743C31.527,3.002,31.719,2.478,31.998,2.478"
                                         ></path>
                                     </g>
                                 </g>
                             </svg>
                         </p>
+                        {% endif %}
                     </span>
                     <div class="d-flex" style="flex-direction: column">
                         <p style="font-weight: 400; font-size: medium">
@@ -446,14 +458,9 @@
                     {% for item in agency %}
 
                     <a
-                        {%
-                        if
-                        item.website
-                        %}
+                        {% if item.website %}
                         href="{{item.website}}"
-                        {%
-                        endif
-                        %}
+                        {% endif %}
                     >
                         <img
                             class="rounded-circle"
@@ -470,6 +477,9 @@
         </div>
         <div class="row mt-5">
             <button
+                {% if wisata.sisa == 0 %}
+                disabled
+                {% endif %}
                 class="btn btn-primary"
                 style="width: 200px"
                 id="add-button"
@@ -478,6 +488,9 @@
                 data-bs-target="#addModal"
             >
                 Beli Tiket
+                {% if wisata.sisa == 0 %}
+                (habis)
+                {% endif %}
             </button>
         </div>
         <div class="row mt-5">
@@ -493,6 +506,7 @@
             <div class="col-5 mt-5">
                 <h2 style="color: #31503e">Feedback</h2>
                 {% for item in feedback %}
+                {% if item.hide == 0 %}
                 <div class="d-flex" style="flex-direction: column">
                     <div
                         class="d-flex"
@@ -521,6 +535,8 @@
                                 class="d-flex"
                                 style="width: 500px; align-self: start"
                             >
+                                {% if wisata.show_rating == 0 %}
+                                <!--  -->
                                 {% for rate in item.range %}
                                 <span style="width: 24px">
                                     <svg
@@ -556,13 +572,14 @@
                                         </g>
                                     </svg>
                                 </span>
-                                {% endfor %}
+                                {% endfor %} {% endif %}
                             </div>
                         </span>
                         <p>{{item.text}}</p>
                     </div>
                 </div>
                 <hr />
+                {% endif %}
                 {% endfor %}
             </div>
             {% endif %}
@@ -648,7 +665,7 @@
     aria-labelledby="addModalLabel"
     aria-hidden="true"
 >
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <form
             method="post"
             action="{% url 'add_reservasi' %}"
@@ -660,7 +677,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="addModalLabel">
-                        Beli Tiket Wisata
+                        Beli Tiket Wisata (sisa tiket hari ini : {{wisata.sisa}})
                     </h1>
                     <button
                         type="button"
@@ -675,6 +692,7 @@
                             >Nama Pemesan</label
                         >
                         <input
+                            required
                             type="text"
                             class="form-control"
                             name="nama"
@@ -687,6 +705,7 @@
                             >Kontak (Aktif Whatsapp)</label
                         >
                         <input
+                            required
                             type="text"
                             class="form-control"
                             name="no_wa"
@@ -700,12 +719,13 @@
                             >Jumlah Orang</label
                         >
                         <input
-                            type="text"
+                            required
+                            type="number"
                             class="form-control"
-                            pattern="[0-9]+"
                             name="jumlah"
                             id="jumlah"
                             placeholder="10"
+                            maks="{{wisata.sisa}}"
                         />
                     </div>
                     <div class="mb-3">
@@ -713,6 +733,7 @@
                             >Tanggal Reservasi</label
                         >
                         <input
+                            required
                             type="date"
                             class="form-control"
                             name="hari"
@@ -731,22 +752,24 @@
                             value="true"
                         />
                         <label class="form-check-label" for="online">
-                            Online
+                            Penuh
                         </label>
                     </div>
                     <div class="form-check mb-3">
+                        {% if wisata.high_season == 0 %}
                         <input
-                            class="form-check-input"
-                            type="radio"
-                            name="online"
-                            id="offline"
-                            value="false"
+                        class="form-check-input"
+                        type="radio"
+                        name="online"
+                        id="offline"
+                        value="0"
                         />
                         <label class="form-check-label" for="offline">
-                            Ditempat
+                            DP
                         </label>
+                        {% endif %}
                     </div>
-                    <div id="pembayaran-online" style="display: none">
+                    <div id="pembayaran-online">
                         <div class="mb-1">
                             <label
                                 for="exampleFormControlInput5"
@@ -757,16 +780,19 @@
                         </div>
                         <div class="mb-3">
                             <label
+                                id="x-biaya"
                                 for="exampleFormControlInput5"
                                 class="form-label"
-                                >Biaya : {{wisata.biaya}} per orang</label
+                                >Biaya : Rp. {{wisata.biaya|intcomma}} per
+                                orang</label
                             >
                         </div>
                         <div class="mb-3">
                             <label for="pembayaran" class="form-label"
-                                >Pembayaran</label
+                                >Upload Bukti Pembayaran</label
                             >
                             <input
+                                required
                                 type="file"
                                 class="form-control"
                                 name="pembayaran"
@@ -794,23 +820,42 @@
 {% endblock content %} {% block javascript %}
 <script>
     const form = document.getElementById('reservasi_form');
-
+    const jumlah =  document.getElementById('jumlah')
+    const hari = document.getElementById('hari')
+    const label = document.getElementById('addModalLabel')
+    hari.addEventListener('change', (e)=>{
+        var xhr = new XMLHttpRequest()
+        xhr.open("GET", `/wisata/reservasi/sisa/{{wisata.id}}?date=`+ e.target.value)
+        xhr.send()
+        xhr.onload =(res)=>{
+            var data = JSON.parse(xhr.response)
+            label.textContent = `Beli Tiket Wisata (sisa tiket tanggal ${e.target.value} : ${data.sisa})`
+            jumlah.setAttribute('maks', data.sisa)
+        }
+    })
+    jumlah.addEventListener('change', (e)=>{
+if (parseInt(e.target.value) > parseInt(e.target.getAttribute('maks'))){
+            e.target.value = e.target.getAttribute('maks')
+        }
+    })
     form.addEventListener('submit', (e) => {
         var formData = new FormData();
-        const input = form.elements;
+         input = form.eleconstments;
         alert(
             'Pesanan tiket berhasil, silahkan menunggu konfirmasi dari Pengelola Wisata via WhatsApp'
         );
     });
 
-    var fieldPemabayaran = document.getElementById('pembayaran-online');
+    var fieldPemabayaran = document.getElementById('x-biaya');
     document.querySelectorAll('[name="online"]').forEach((e) => {
         e.addEventListener('change', (e) => {
-            console.log('change');
             if (e.target.value == 'true') {
-                fieldPemabayaran.style.display = 'block';
+                fieldPemabayaran.textContent =
+                    'Biaya : Rp. {{wisata.biaya|intcomma}} per orang';
             } else {
-                fieldPemabayaran.style.display = 'none';
+                fieldPemabayaran.textContent =
+                {% widthratio wisata.biaya 2 1 as x %}
+                    'Biaya : Rp. {{ x|intcomma }} per orang';
             }
         });
     });

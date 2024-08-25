@@ -30,6 +30,7 @@
                         <th scope="col">Kontak</th>
                         <th scope="col">Alamat</th>
                         <th scope="col">Deskripsi</th>
+                        <th scope="col">Jenis</th>
                         <th scope="col">Website</th>
 
                         <th scope="col" style="width: 180px">Action</th>
@@ -52,6 +53,10 @@
                         <td>{{agency.kontak}}</td>
                         <td>{{agency.alamat}}</td>
                         <td>{{agency.deskripsi}}</td>
+                        <td>
+                            {% if agency.is_hotel %} Penginapan {% else %}
+                            Perjalanan {% endif %}
+                        </td>
                         <td>{{agency.website}}</td>
                         <td>
                             <div
@@ -245,6 +250,17 @@
                             name="logo"
                             accept="image/png, image/gif, image/jpeg"
                         />
+                    </div>
+                    <div class="form-check">
+                        <input
+                            class="form-check-input"
+                            type="checkbox"
+                            name="is_hotel"
+                            id="flexCheckDefault"
+                        />
+                        <label class="form-check-label" for="flexCheckDefault">
+                            is_hotel
+                        </label>
                     </div>
                 </div>
                 <div class="modal-footer">

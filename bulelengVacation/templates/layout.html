@@ -27,6 +27,12 @@
                 color: white;
             }
 
+            input::-webkit-outer-spin-button,
+            input::-webkit-inner-spin-button {
+                -webkit-appearance: none;
+                margin: 0;
+            }
+
             .xheader::before {
                 position: absolute;
                 top: 0;
@@ -75,9 +81,32 @@
                             >
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'agensi' %}"
-                                >Agensi</a
-                            >
+                            <div class="dropdown">
+                                <button
+                                    class="btn dropdown-toggle"
+                                    type="button"
+                                    data-bs-toggle="dropdown"
+                                    aria-expanded="false"
+                                >
+                                    Akomodasi
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a
+                                            class="dropdown-item text-dark"
+                                            href="{% url 'akomodasi' %}"
+                                            >Perjalanan</a
+                                        >
+                                    </li>
+                                    <li>
+                                        <a
+                                            class="dropdown-item text-dark"
+                                            href="{% url 'hotel' %}"
+                                            >Penginapan</a
+                                        >
+                                    </li>
+                                </ul>
+                            </div>
                         </li>
                         {% if request.user %} {% if request.user.is_active %}
                         <li class="nav-item">

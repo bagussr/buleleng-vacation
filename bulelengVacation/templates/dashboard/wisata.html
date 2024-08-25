@@ -26,6 +26,7 @@
                             <th scope="col" style="width: 200px">Kategori</th>
                             <th scope="col">Detail</th>
                             <th scope="col" style="width: 20px">Rating</th>
+                            <th scope="col" style="width: 20px">Maks</th>
                             <th scope="col">Perizinan</th>
                             <th scope="col">Gambar</th>
                             <th scope="col">Gambar Tambahan</th>
@@ -50,6 +51,7 @@
                                             data-bs-target="#deskripsiModal">Deskripsi</button>
                                 </td>
                                 <td class="text-center">{{ wisata.rating }}</td>
+                                <td class="text-center">{{ wisata.maks }}</td>
                                 <td>
                                     <button name="button-perizinan"
                                             data-perizinan="{{ wisata.perizinan.url }}"
@@ -123,6 +125,39 @@
                                                     <path d="m10.97 4.97-.02.022-3.473 4.425-2.093-2.094a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05"/>
                                                   </svg>
                                             </a>
+                                        {% endif %}
+                                        {% if request.user.is_staff %}
+                                        <!--  -->
+                                        {% if not request.user.is_superuser %}
+                                        <!--  -->
+                                        <a
+                                                style="height: 2.4rem"
+                                                href="{% url 'edit_wisata_high_season' id=wisata.id %}"
+                                                {% if wisata.high_season == 1 %}
+                                                class="btn btn-success d-flex aligns-center"
+                                                {% else %}
+                                                class="btn btn-secondary d-flex aligns-center"
+                                                {% endif %}
+                                                >
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-circle" viewBox="0 0 16 16">
+                                                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                                                    <path d="m10.97 4.97-.02.022-3.473 4.425-2.093-2.094a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05"/>
+                                                  </svg>
+                                            </a>
+                                        <a
+                                                style="height: 2.4rem"
+                                                href="{% url 'edit_wisata_show_rating' id=wisata.id %}"
+                                                {% if wisata.show_rating == 0 %}
+                                                class="btn btn-success d-flex aligns-center"
+                                                {% else %}
+                                                class="btn btn-secondary d-flex aligns-center"
+                                                {% endif %}
+                                                >
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-stars" viewBox="0 0 16 16">
+                                                    <path d="M7.657 6.247c.11-.33.576-.33.686 0l.645 1.937a2.89 2.89 0 0 0 1.829 1.828l1.936.645c.33.11.33.576 0 .686l-1.937.645a2.89 2.89 0 0 0-1.828 1.829l-.645 1.936a.361.361 0 0 1-.686 0l-.645-1.937a2.89 2.89 0 0 0-1.828-1.828l-1.937-.645a.361.361 0 0 1 0-.686l1.937-.645a2.89 2.89 0 0 0 1.828-1.828zM3.794 1.148a.217.217 0 0 1 .412 0l.387 1.162c.173.518.579.924 1.097 1.097l1.162.387a.217.217 0 0 1 0 .412l-1.162.387A1.73 1.73 0 0 0 4.593 5.69l-.387 1.162a.217.217 0 0 1-.412 0L3.407 5.69A1.73 1.73 0 0 0 2.31 4.593l-1.162-.387a.217.217 0 0 1 0-.412l1.162-.387A1.73 1.73 0 0 0 3.407 2.31zM10.863.099a.145.145 0 0 1 .274 0l.258.774c.115.346.386.617.732.732l.774.258a.145.145 0 0 1 0 .274l-.774.258a1.16 1.16 0 0 0-.732.732l-.258.774a.145.145 0 0 1-.274 0l-.258-.774a1.16 1.16 0 0 0-.732-.732L9.1 2.137a.145.145 0 0 1 0-.274l.774-.258c.346-.115.617-.386.732-.732z"/>
+                                                  </svg>
+                                            </a>
+                                        {% endif %}
                                         {% endif %}
                                         <button style="height: 2.4rem"
                                                 class="btn btn-danger d-flex aligns-center"
@@ -204,6 +239,16 @@
                                           id="exampleFormControlTextarea1"
                                           name="deskripsi"
                                           rows="3"></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="maks" class="form-label">Maks Tiket</label>
+                                <input required
+                                       type="text"
+                                       class="form-control"
+                                       name="maks"
+                                       id="maks"
+                                       pattern="[0-9]+"
+                                       placeholder="10" />
                             </div>
                             <div class="mb-3">
                                 <label for="biaya" class="form-label">Biaya</label>
@@ -314,6 +359,16 @@
                             <div class="mb-3">
                                 <label for="deskripsi-edit" class="form-label">Deskripsi</label>
                                 <textarea class="form-control" id="deskripsi-edit" name="deskripsi" rows="3"></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="maks" class="form-label">Maks Tiket</label>
+                                <input required
+                                       type="text"
+                                       class="form-control"
+                                       name="maks"
+                                       id="edit-maks"
+                                       pattern="[0-9]+"
+                                       placeholder="10" />
                             </div>
                             <div class="mb-3">
                                 <label for="biaya" class="form-label">Biaya</label>
@@ -583,6 +638,7 @@
                     form['nama-edit'].value = data.nama;
                     form['lokasi-edit'].value = data.alamat;
                     form['emmet-edit'].value = data.emmet_tag;
+                    form['edit-maks'].value = data.maks;
                     form['biaya'].value = data.biaya;
                     form['no_rek'].value = data.no_rek;
                     form['bank'].value = data.bank;

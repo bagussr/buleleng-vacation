@@ -1,3 +1,4 @@
+from datetime import datetime
 from django.db import models
 
 from auths.models import CustomUser
@@ -20,6 +21,9 @@ class Wisata(models.Model):
     no_rek = models.CharField(max_length=100, null=True, blank=True)
     bank = models.CharField(max_length=100, null=True, blank=True)
     biaya = models.CharField(max_length=255, null=True, blank=True)
+    high_season = models.BooleanField(default=False)
+    show_rating = models.BooleanField(default=False)
+    maks = models.IntegerField(default=0)
 
     kategori = models.ForeignKey(
         Kategori, on_delete=models.SET_NULL, null=True, blank=True
@@ -31,9 +35,13 @@ class Wisata(models.Model):
     def convert(self):
         rating = self.feedback_set.all()
         photos = self.fotowisata_set.all()
+        reservasi = self.reservasiwisata_set.filter(hari=datetime.now()).all()
+        sold = 0
+        for i in reservasi:
+            sold += i.jumlah
         rate = 0
         for i in rating:
-            rate += round(i.rating / float(self.feedback_set.count()), 1)
+            rate += round(i.rating / float(self.feedback_set.filter(hide=0).count()), 1)
 
         return {
             "id": self.id,
@@ -50,6 +58,10 @@ class Wisata(models.Model):
             "no_rek": self.no_rek,
             "bank": self.bank,
             "biaya": self.biaya,
+            "high_season": self.high_season,
+            "show_rating": self.show_rating,
+            "maks": self.maks,
+            "sisa": (self.maks - sold) if (self.maks - sold) > 0 else 0,
         }
 
     def to_dict(self):
@@ -59,11 +71,14 @@ class Wisata(models.Model):
             "alamat": self.alamat,
             "emmet_tag": self.emmet_tags,
             "deskripsi": self.deskripsi,
-            "kategori": self.kategori.nama if self.kategori else None,
+            "kategori": self.kategori.id if self.kategori else None,
             "pilihan": self.pilihan,
             "no_rek": self.no_rek,
             "bank": self.bank,
             "biaya": self.biaya,
+            "high_season": self.high_season,
+            "maks": self.maks,
+            "show_rating": self.show_rating,
         }
 
 
@@ -78,6 +93,7 @@ class Feedback(models.Model):
     text = models.TextField()
     rating = models.FloatField()
     tanggal = models.DateTimeField(auto_now_add=True)
+    hide = models.BooleanField(default=False)
 
     wisata_id = models.ForeignKey(Wisata, on_delete=models.CASCADE)
     user_id = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
@@ -91,6 +107,7 @@ class Feedback(models.Model):
             "tanggal": self.tanggal,
             "user": self.user_id_id,
             "wisata": self.wisata_id,
+            "hide": self.hide,
         }
 
 
@@ -107,6 +124,7 @@ class TravelAgency(models.Model):
     deskripsi = models.TextField(null=True, blank=True)
     logo = models.ImageField(upload_to="agency/")
     website = models.TextField(null=True, blank=True)
+    is_hotel = models.BooleanField(default=False)
 
     user = models.ForeignKey(
         CustomUser, on_delete=models.CASCADE, null=True, blank=True
@@ -135,7 +153,7 @@ class ReservasiWisata(models.Model):
     pembayaran = models.ImageField(
         upload_to="wisata/pemabayaran", null=True, blank=True
     )
-    online = models.BooleanField(default=False)
+    fullpayment = models.BooleanField(default=False)
     nama = models.CharField(max_length=255)
     no_wa = models.CharField(max_length=15)
     hari = models.DateField()

@@ -31,9 +31,14 @@ urlpatterns = [
     path("login", LoginView.as_view(), name="login"),
     path("register", RegisterView.as_view(), name="register"),
     path("", views.index, name="index"),
-    path("agensi", views.agensi, name="agensi"),
+    path("akomodasi", views.agensi, name="akomodasi"),
+    path("hotel", views.hotel, name="hotel"),
     path(
-        "agensi/<str:nama>",
+        "akomodasi/<str:nama>",
+        views.detail_agensi,
+    ),
+    path(
+        "hotel/<str:nama>",
         views.detail_agensi,
     ),
     path("kritik", views.kritik_saran, name="kritik"),

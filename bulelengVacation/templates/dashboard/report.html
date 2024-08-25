@@ -26,7 +26,7 @@
             <canvas id="myChart"></canvas>
         </div>
         {% endif %}
-        <div class="row mt-3">
+        <div class="row mt-3 container p-3">
             <table class="table table-light">
                 <thead class="border text-center" style="font-weight: 600">
                     <tr>
@@ -34,6 +34,12 @@
                         <th scope="col">Nama Wisata</th>
                         <th scope="col">Jumlah</th>
                         <th scope="col" style="width: 180px">Tanggal</th>
+                        <th scope="col" style="width: 80px">
+                            {% if request.user.is_staff %}
+                            <!--  -->
+                            {% if request.user.is_superuser == 0 %} action
+                            {%endif%} {%endif%}
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -45,11 +51,93 @@
                         <td>{{report.wisata.nama}}</td>
                         <td>{{report.kunjungan}}</td>
                         <td>{{report.tanggal}}</td>
+                        <td class="text-center">
+                            {% if request.user.is_staff %}
+                            <!--  -->
+                            {% if request.user.is_superuser == 0 %}
+
+                            <button
+                                class="btn btn-primary d-flex aligns-center"
+                                style="height: 2.4rem"
+                                name="edit-button"
+                                data-edit="{{ report.id }}"
+                                data-bs-toggle="modal"
+                                data-bs-target="#editModal"
+                            >
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="16"
+                                    height="16"
+                                    fill="currentColor"
+                                    class="bi bi-pencil"
+                                    viewBox="0 0 16 16"
+                                >
+                                    <path
+                                        d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"
+                                    />
+                                </svg>
+                            </button>
+                            {% endif %} {% endif %}
+                        </td>
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
         </div>
+    </div>
+</div>
+
+<div
+    class="modal fade"
+    id="editModal"
+    tabindex="-1"
+    aria-labelledby="editModalLabel"
+    aria-hidden="true"
+>
+    <div class="modal-dialog">
+        <form id="form-edit" method="post">
+            {% csrf_token %}
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="editModalLabel">
+                        Edit Report
+                    </h1>
+                    <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                    ></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="nama-edit" class="form-label"
+                            >Jumlah Kunjungan</label
+                        >
+                        <input
+                            type="text"
+                            class="form-control"
+                            name="kunjungan"
+                            id="nama-edit"
+                            placeholder="100"
+                            pattern="[0-9]+"
+                        />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button
+                        type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal"
+                    >
+                        Batal
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        Simpan
+                    </button>
+                </div>
+            </div>
+        </form>
     </div>
 </div>
 
@@ -180,6 +268,13 @@
     var labels = [];
     var datas = []
 
+    var editButtons = document.querySelectorAll("[name='edit-button']");
+    editButtons.forEach((button) => {
+        button.addEventListener('click', function () {
+        document.getElementById('form-edit').setAttribute('action','/wisata/edit/report/' + this.getAttribute('data-edit'));
+        })
+    })
+
     {% for item in analytic %}
       labels.push("{{item.wisata}}")
       datas.push({{item.dcount  }})
@@ -191,7 +286,7 @@
         labels: labels,
         datasets: [
         {
-          label: 'Analisis Wisata di Akses',
+          label: 'Analisis Kunjungan Wisata',
           data: datas,
           borderWidth: 1
         }

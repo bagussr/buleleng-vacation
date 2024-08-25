@@ -5,9 +5,20 @@
 {% block content %}
 <div class="container">
     <div class="row">
-        <h1>Feedback</h1>
+        <h1>Reservasi Wisata</h1>
     </div>
     <div class="container p-4" style="background-color: white">
+        <div class="row mb-3">
+            <button
+                class="btn btn-primary"
+                style="width: fit-content"
+                id="add-button"
+                data-bs-toggle="modal"
+                data-bs-target="#addModal"
+            >
+                + Beli Tiket Ditempat
+            </button>
+        </div>
         <div class="row">
             <table class="table table-light">
                 <thead class="border text-center" style="font-weight: 600">
@@ -18,7 +29,7 @@
                         <th scope="col">Jumlah</th>
                         <th scope="col">No Wa</th>
                         <th scope="col">Tanggal</th>
-                        <th scope="col">User</th>
+                        <th scope="col">Pihak Akomodasi</th>
                         <th scope="col">Bukti Transfer</th>
                     </tr>
                 </thead>
@@ -39,7 +50,13 @@
                         <td>{{item.jumlah}}</td>
                         <td class="text-center">{{item.no_wa}}</td>
                         <td>{{item.hari|date:'Y M d'}}</td>
-                        <td>{{item.user.first_name}}</td>
+                        <td>
+                            {% if item.user.is_agency %}
+                            <!--  -->
+                            ✔
+                            <!--  -->
+                            {% else %} ☓ {% endif %}
+                        </td>
                         <td>
                             {% if item.pembayaran %}
                             <img
@@ -56,4 +73,121 @@
         </div>
     </div>
 </div>
-{% endblock content %}
+
+<div
+    class="modal fade"
+    id="addModal"
+    tabindex="-1"
+    aria-labelledby="addModalLabel"
+    aria-hidden="true"
+>
+    <div class="modal-dialog">
+        <form method="post" action="{% url 'add_reservasi_dashboard' %}">
+            {% csrf_token %}
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="addModalLabel">
+                        Beli Tiket Ditempat
+                    </h1>
+                    <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                    ></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <select
+                            class="form-select"
+                            aria-label="Default select example"
+                            name="wisata_id"
+                        >
+                            <option selected>
+                                Buka menu untuk memilih Wisata
+                            </option>
+                            {% for wisata in wisata %}
+                            <option value="{{ wisata.id }}">
+                                {{ wisata.nama }} : (sisa : {{wisata.sisa}})
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="nama" class="form-label"
+                            >Nama Pemesan</label
+                        >
+                        <input
+                            required
+                            type="text"
+                            class="form-control"
+                            name="nama"
+                            id="nama"
+                            placeholder="Steve"
+                        />
+                    </div>
+                    <div class="mb-3">
+                        <label for="no_wa" class="form-label"
+                            >Kontak (Aktif Whatsapp)</label
+                        >
+                        <input
+                            type="text"
+                            class="form-control"
+                            name="no_wa"
+                            pattern="[0-9]+"
+                            id="no_wa"
+                            placeholder="089xxx"
+                        />
+                    </div>
+                    <div class="mb-3">
+                        <label for="jumlah" class="form-label"
+                            >Jumlah Orang</label
+                        >
+                        <input
+                            required
+                            type="number"
+                            class="form-control"
+                            name="jumlah"
+                            id="jumlah"
+                            placeholder="10"
+                            maks="{{wisata.sisa}}"
+                        />
+                    </div>
+                    <div class="mb-3">
+                        <label for="hari" class="form-label"
+                            >Tanggal</label
+                        >
+                        <input
+                            readonly
+                            type="date"
+                            class="form-control"
+                            name="hari"
+                            id="hari"
+                        />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button
+                        type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal"
+                    >
+                        Batal
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        Tambah
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock content %} {% block javascript %}
+
+<script>
+    var date = new Date(Date.now());
+    document.getElementById('hari').valueAsDate = date;
+</script>
+
+{% endblock %}

@@ -16,6 +16,9 @@
                         <th scope="col" style="width: 120px !important">
                             User
                         </th>
+                        <th scope="col" style="width: 120px !important">
+                            Jenis User
+                        </th>
                         <th scope="col" style="width: 360px">Text</th>
                         <th scope="col" style="width: 80px">Tanggal</th>
                     </tr>
@@ -28,6 +31,15 @@
                         </th>
                         <td style="width: 120px !important">
                             {{item.user.first_name}} {{item.user.last_name}}
+                        </td>
+                        <td style="width: 120px !important">
+                            {% if item.user.is_staff %}
+                                Pengelola Wisata
+                            {% elif item.user.is_agency %}
+                                Pengelola Akomodasi                                
+                            {% else %}
+                                Wisatawan
+                            {% endif %}
                         </td>
                         <td class="text-center" style="width: 360px">
                             {{item.text}}

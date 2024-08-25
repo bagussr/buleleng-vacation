@@ -3,7 +3,7 @@ from django.core import serializers
 from django.shortcuts import render
 from django.http.response import HttpResponseForbidden
 from django.contrib.auth.decorators import login_required
-from django.db.models import Count
+from django.db.models import Count, Sum
 
 from article.models import Article
 from vacation.models import (
@@ -37,15 +37,18 @@ def reservasi_wisata(request):
     reservasi = ReservasiWisata.objects.filter(
         wisata_id__in=[x.id for x in wisata]
     ).all()
-    print(wisata)
-    return render(request, "dashboard/reservasi.html", {"reservasi": reservasi})
+    return render(
+        request,
+        "dashboard/reservasi.html",
+        {"reservasi": reservasi, "wisata": [x.convert() for x in wisata]},
+    )
 
 
 @login_required(login_url="/login")
 def reservasi(request):
     travel = TravelAgency.objects.filter(user_id=request.user.id).first()
     _wisata = (
-        WisataAgency.objects.filter(agency_id=travel.id).exclude(publish=False).all()
+        WisataAgency.objects.filter(agency_id=travel.id).exclude(pilihan=False).all()
     )
     wisata = Wisata.objects.filter(id__in=[x.wisata_id for x in _wisata]).all()
     if request.method.upper() == "POST":
@@ -68,7 +71,7 @@ def report(request):
     if request.user.is_superuser:
         res = (
             ReportWisata.objects.values("wisata_id")
-            .annotate(dcount=Count("wisata_id"))
+            .annotate(dcount=Sum("kunjungan"))
             .order_by()
         )
         report = ReportWisata.objects.all()
@@ -98,7 +101,6 @@ def report(request):
 def dashboard(request):
     if request.user.is_agency:
         travel = TravelAgency.objects.filter(user_id=request.user.id).first()
-        print(travel)
         return render(request, "dashboard_agency.html", {"agensi": travel})
     if request.user.is_superuser:
         res = (

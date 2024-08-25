@@ -12,13 +12,14 @@
         <img
             src="{{agensi.logo.url}}"
             alt="{{agensi.nama}}"
-            style="width: 300px; height: 300px"
+            style="width: 380px; height: 350px; object-fit: cover"
+            class="rounded-3 p-0"
         />
     </div>
 
     <div class="row mt-3">
         <h3>Deskripsi</h3>
-        {% if condition %}
+        {% if agensi.deskripsi %}
         <p>{{agensi.deskripsi}}</p>
         {% else %}
         <p>Tidak ada deskripsi</p>

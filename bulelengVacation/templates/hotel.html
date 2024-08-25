@@ -1,14 +1,14 @@
 {% extends "layout.html" %}
 
 {% block title %}
-Akomodasi Perjalanan
+Akomodasi Penginapan
 {% endblock %}
 <!--  -->
 {% block content %}
 
 <div class="container" style="padding: 4rem 0">
     <div class="row">
-        <h1>Akomodasi Perjalanan</h1>
+        <h1>Akomodasi Penginapan</h1>
         <div
             class="mt-5"
             style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem"
@@ -18,7 +18,7 @@ Akomodasi Perjalanan
                 class="d-flex"
                 style="flex-direction: column; gap: 0.7rem; cursor: pointer"
                 btn="button-link"
-                data-url="/akomodasi/{{item.nama}}"
+                data-url="/hotel/{{item.nama}}"
             >
                 <img
                     height="320"
